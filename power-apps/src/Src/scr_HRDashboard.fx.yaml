@@ -1,0 +1,628 @@
+scr_HRDashboard As screen:
+    CopilotContext: |-
+        ={ ScreenName: Self.Name }
+    CopilotPromptSuggestions: =[]
+    Fill: |-
+        =ColorValue("#F8FAFC")
+    OnVisible: |-
+        =ClearCollect(
+            colTrackerCache,
+            'Onboarding Tracker'
+        )
+
+    con_HR_Main As groupContainer.verticalAutoLayoutContainer:
+        Fill: |-
+            =ColorValue("#F8FAFC")
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Stretch
+        LayoutDirection: =LayoutDirection.Vertical
+        LayoutGridColumnMinWidth: =0
+        LayoutGridColumns: =6
+        LayoutGridRowMinHeight: =0
+        LayoutGridRows: =6
+        LayoutMode: =LayoutMode.Auto
+        PaddingBottom: =8
+        PaddingLeft: =8
+        PaddingRight: =8
+        PaddingTop: =8
+        Width: =Parent.Width
+        ZIndex: =1
+
+        con_HR_Navbar As groupContainer.horizontalAutoLayoutContainer:
+            AlignInContainer: =AlignInContainer.SetByContainer
+            BorderColor: |-
+                =ColorValue("#E2E8F0")
+            BorderThickness: =1
+            Fill: |-
+                =ColorValue("#FFFFFF")
+            FillPortions: =0
+            Height: =68
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutGap: =12
+            LayoutGridColumnMinWidth: =0
+            LayoutGridColumns: =6
+            LayoutGridRowMinHeight: =0
+            LayoutGridRows: =6
+            LayoutMaxHeight: =0
+            LayoutMaxWidth: =0
+            LayoutMinHeight: =16
+            LayoutMinWidth: =16
+            LayoutMode: =LayoutMode.Auto
+            PaddingLeft: =32
+            PaddingRight: =32
+            Width: =Parent.Width
+            ZIndex: =1
+
+            lbl_HR_NavLogo As label:
+                Color: |-
+                    =ColorValue("#0F172A")
+                FontWeight: =FontWeight.Bold
+                LayoutMaxHeight: =0
+                LayoutMaxWidth: =0
+                LayoutMinHeight: =16
+                LayoutMinWidth: =16
+                Size: =16
+                Text: ="TALENTFLOW"
+                Width: =160
+                Wrap: =false
+                X: =40
+                Y: =40
+                ZIndex: =1
+
+            lbl_HR_NavDivider As label:
+                Color: |-
+                    =ColorValue("#CBD5E1")
+                LayoutMaxHeight: =0
+                LayoutMaxWidth: =0
+                LayoutMinHeight: =16
+                LayoutMinWidth: =16
+                Size: =16
+                Text: ="|"
+                Width: =16
+                X: =40
+                Y: =40
+                ZIndex: =2
+
+            lbl_HR_NavSubtitle As label:
+                Color: |-
+                    =ColorValue("#64748B")
+                FillPortions: =1
+                LayoutMaxHeight: =0
+                LayoutMaxWidth: =0
+                LayoutMinHeight: =16
+                LayoutMinWidth: =16
+                Text: ="Institutional HR Operations"
+                Width: =240
+                Wrap: =false
+                X: =40
+                Y: =40
+                ZIndex: =3
+
+            btn_HR_NavToIntake As button:
+                Color: |-
+                    =ColorValue("#0F172A")
+                Fill: |-
+                    =ColorValue("#F1F5F9")
+                Height: =55
+                LayoutMaxHeight: =0
+                LayoutMaxWidth: =0
+                LayoutMinHeight: =16
+                LayoutMinWidth: =16
+                OnSelect: =Navigate(scr_Intake, ScreenTransition.Fade)
+                PaddingBottom: =0
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =0
+                Text: ="+ New Placement"
+                Width: =175
+                X: =40
+                Y: =40
+                ZIndex: =4
+
+            btn_HR_NavToManager As button:
+                Color: |-
+                    =ColorValue("#4F46E5")
+                Fill: |-
+                    =ColorValue("#EEF2FF")
+                Height: =55
+                LayoutMaxHeight: =0
+                LayoutMaxWidth: =0
+                LayoutMinHeight: =16
+                LayoutMinWidth: =16
+                OnSelect: =Navigate(scr_ManagerQueue, ScreenTransition.Fade)
+                PaddingBottom: =0
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =0
+                Size: =13
+                Text: ="Manager Queue"
+                Visible: =Lower(User().Email) = Lower("peopleops@organization.com")
+                Width: =170
+                X: =40
+                Y: =40
+                ZIndex: =5
+
+        con_HR_ScrollArea As groupContainer.verticalAutoLayoutContainer:
+            AlignInContainer: =AlignInContainer.SetByContainer
+            Height: =Parent.Height - 68
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutDirection: =LayoutDirection.Vertical
+            LayoutGridColumnMinWidth: =0
+            LayoutGridColumns: =6
+            LayoutGridRowMinHeight: =0
+            LayoutGridRows: =6
+            LayoutMaxHeight: =0
+            LayoutMaxWidth: =0
+            LayoutMinHeight: =16
+            LayoutMinWidth: =16
+            LayoutMode: =LayoutMode.Auto
+            PaddingBottom: =8
+            PaddingLeft: =8
+            PaddingRight: =8
+            PaddingTop: =8
+            Width: =Parent.Width
+            ZIndex: =4
+
+            con_HR_Content As groupContainer.verticalAutoLayoutContainer:
+                LayoutAlignItems: =LayoutAlignItems.Stretch
+                LayoutDirection: =LayoutDirection.Vertical
+                LayoutGap: =20
+                LayoutGridColumnMinWidth: =0
+                LayoutGridColumns: =6
+                LayoutGridRowMinHeight: =0
+                LayoutGridRows: =6
+                LayoutMaxHeight: =0
+                LayoutMaxWidth: =0
+                LayoutMinHeight: =16
+                LayoutMinWidth: =16
+                LayoutMode: =LayoutMode.Auto
+                LayoutOverflowY: =LayoutOverflow.Scroll
+                PaddingBottom: =40
+                PaddingLeft: =8
+                PaddingRight: =8
+                PaddingTop: =28
+                Visible: =Lower(User().Email) = Lower("peopleops@organization.com")
+                Width: =Min(Parent.Width - 48, 960)
+                ZIndex: =1
+
+                con_HR_HeaderStrip As groupContainer.horizontalAutoLayoutContainer:
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    FillPortions: =0
+                    Height: =54
+                    LayoutAlignItems: =LayoutAlignItems.Center
+                    LayoutGridColumnMinWidth: =0
+                    LayoutGridColumns: =6
+                    LayoutGridRowMinHeight: =0
+                    LayoutGridRows: =6
+                    LayoutMaxHeight: =0
+                    LayoutMaxWidth: =0
+                    LayoutMinHeight: =16
+                    LayoutMinWidth: =16
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingBottom: =8
+                    PaddingLeft: =8
+                    PaddingRight: =8
+                    PaddingTop: =8
+                    Width: =Parent.Width
+                    ZIndex: =1
+
+                    lbl_HR_PageTitle As label:
+                        Color: |-
+                            =ColorValue("#0F172A")
+                        FontWeight: =FontWeight.Bold
+                        Height: =48
+                        LayoutMaxHeight: =0
+                        LayoutMaxWidth: =0
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingBottom: =0
+                        PaddingTop: =0
+                        Size: =20
+                        Text: ="Candidate Placements & Fulfillment"
+                        Width: =500
+                        Wrap: =false
+                        ZIndex: =1
+
+                con_HR_KPIRow As groupContainer.horizontalAutoLayoutContainer:
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    FillPortions: =0
+                    Height: =110
+                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                    LayoutGap: =16
+                    LayoutGridColumnMinWidth: =0
+                    LayoutGridColumns: =6
+                    LayoutGridRowMinHeight: =0
+                    LayoutGridRows: =6
+                    LayoutMaxHeight: =0
+                    LayoutMaxWidth: =0
+                    LayoutMinHeight: =16
+                    LayoutMinWidth: =16
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingBottom: =8
+                    PaddingLeft: =8
+                    PaddingRight: =8
+                    PaddingTop: =8
+                    ZIndex: =2
+
+                    con_KPI_Pending As groupContainer.verticalAutoLayoutContainer:
+                        AlignInContainer: =AlignInContainer.SetByContainer
+                        BorderColor: |-
+                            =ColorValue("#E2E8F0")
+                        BorderThickness: =1
+                        Fill: |-
+                            =ColorValue("#FFFFFF")
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =4
+                        LayoutGridColumnMinWidth: =0
+                        LayoutGridColumns: =6
+                        LayoutGridRowMinHeight: =0
+                        LayoutGridRows: =6
+                        LayoutJustifyContent: =LayoutJustifyContent.Center
+                        LayoutMaxHeight: =0
+                        LayoutMaxWidth: =0
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        LayoutMode: =LayoutMode.Auto
+                        PaddingBottom: =8
+                        PaddingLeft: =12
+                        PaddingRight: =12
+                        PaddingTop: =8
+                        RadiusBottomLeft: =10
+                        RadiusBottomRight: =10
+                        RadiusTopLeft: =10
+                        RadiusTopRight: =10
+                        ZIndex: =1
+
+                        lbl_KPI_Pending_Count As label:
+                            Align: =Align.Center
+                            Color: |-
+                                =ColorValue("#D97706")
+                            FontWeight: =FontWeight.Bold
+                            Height: =36
+                            LayoutMaxHeight: =0
+                            LayoutMaxWidth: =0
+                            LayoutMinHeight: =16
+                            LayoutMinWidth: =16
+                            Size: =28
+                            Text: =Text(CountRows(Filter(colTrackerCache, OnboardingStatus.Value = "Pending Approval")))
+                            Width: =Parent.Width - 24
+                            Wrap: =false
+                            ZIndex: =1
+
+                        lbl_KPI_Pending_Label As label:
+                            Align: =Align.Center
+                            Color: |-
+                                =ColorValue("#64748B")
+                            Height: =22
+                            LayoutMaxHeight: =0
+                            LayoutMaxWidth: =0
+                            LayoutMinHeight: =16
+                            LayoutMinWidth: =16
+                            Size: =12
+                            Text: ="Pending Approvals"
+                            Width: =Parent.Width - 24
+                            Wrap: =false
+                            ZIndex: =2
+
+                    con_KPI_Approved As groupContainer.verticalAutoLayoutContainer:
+                        AlignInContainer: =AlignInContainer.SetByContainer
+                        BorderColor: |-
+                            =ColorValue("#E2E8F0")
+                        BorderThickness: =1
+                        Fill: |-
+                            =ColorValue("#FFFFFF")
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =4
+                        LayoutGridColumnMinWidth: =0
+                        LayoutGridColumns: =6
+                        LayoutGridRowMinHeight: =0
+                        LayoutGridRows: =6
+                        LayoutJustifyContent: =LayoutJustifyContent.Center
+                        LayoutMaxHeight: =0
+                        LayoutMaxWidth: =0
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        LayoutMode: =LayoutMode.Auto
+                        PaddingBottom: =8
+                        PaddingLeft: =12
+                        PaddingRight: =12
+                        PaddingTop: =8
+                        RadiusBottomLeft: =10
+                        RadiusBottomRight: =10
+                        RadiusTopLeft: =10
+                        RadiusTopRight: =10
+                        ZIndex: =2
+
+                        lbl_KPI_Approved_Count As label:
+                            Align: =Align.Center
+                            Color: |-
+                                =ColorValue("#16A34A")
+                            FontWeight: =FontWeight.Bold
+                            Height: =36
+                            LayoutMaxHeight: =0
+                            LayoutMaxWidth: =0
+                            LayoutMinHeight: =16
+                            LayoutMinWidth: =16
+                            Size: =28
+                            Text: =Text(CountRows(Filter(colTrackerCache, OnboardingStatus.Value = "Approved")))
+                            Width: =Parent.Width - 24
+                            ZIndex: =1
+
+                        lbl_KPI_Approved_Label As label:
+                            Align: =Align.Center
+                            Color: |-
+                                =ColorValue("#64748B")
+                            Height: =22
+                            LayoutMaxHeight: =0
+                            LayoutMaxWidth: =0
+                            LayoutMinHeight: =16
+                            LayoutMinWidth: =16
+                            Size: =12
+                            Text: ="Packets Dispatched"
+                            Width: =Parent.Width - 24
+                            Wrap: =false
+                            ZIndex: =2
+
+                    con_KPI_Attention As groupContainer.verticalAutoLayoutContainer:
+                        AlignInContainer: =AlignInContainer.SetByContainer
+                        BorderColor: |-
+                            =ColorValue("#E2E8F0")
+                        BorderThickness: =1
+                        Fill: |-
+                            =ColorValue("#FFFFFF")
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =4
+                        LayoutGridColumnMinWidth: =0
+                        LayoutGridColumns: =6
+                        LayoutGridRowMinHeight: =0
+                        LayoutGridRows: =6
+                        LayoutJustifyContent: =LayoutJustifyContent.Center
+                        LayoutMaxHeight: =0
+                        LayoutMaxWidth: =0
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        LayoutMode: =LayoutMode.Auto
+                        PaddingBottom: =8
+                        PaddingLeft: =12
+                        PaddingRight: =12
+                        PaddingTop: =8
+                        RadiusBottomLeft: =10
+                        RadiusBottomRight: =10
+                        RadiusTopLeft: =10
+                        RadiusTopRight: =10
+                        ZIndex: =3
+
+                        lbl_KPI_Attention_Count As label:
+                            Align: =Align.Center
+                            Color: |-
+                                =ColorValue("#DC2626")
+                            FontWeight: =FontWeight.Bold
+                            Height: =36
+                            LayoutMaxHeight: =0
+                            LayoutMaxWidth: =0
+                            LayoutMinHeight: =16
+                            LayoutMinWidth: =16
+                            Size: =28
+                            Text: =Text(CountRows(Filter(colTrackerCache, OnboardingStatus.Value = "Rejected" || OnboardingStatus.Value = "Escalated to HR")))
+                            Width: =Parent.Width - 24
+                            Wrap: =false
+                            ZIndex: =1
+
+                        lbl_KPI_Attention_Label As label:
+                            Align: =Align.Center
+                            Color: |-
+                                =ColorValue("#64748B")
+                            Height: =22
+                            LayoutMaxHeight: =0
+                            LayoutMaxWidth: =0
+                            LayoutMinHeight: =16
+                            LayoutMinWidth: =16
+                            Size: =12
+                            Text: ="Escalations / Rejected"
+                            Width: =Parent.Width - 24
+                            Wrap: =false
+                            ZIndex: =2
+
+                con_HR_FilterBar As groupContainer.horizontalAutoLayoutContainer:
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    Height: =48
+                    LayoutAlignItems: =LayoutAlignItems.Center
+                    LayoutGap: =14
+                    LayoutGridColumnMinWidth: =0
+                    LayoutGridColumns: =6
+                    LayoutGridRowMinHeight: =0
+                    LayoutGridRows: =6
+                    LayoutMaxHeight: =0
+                    LayoutMaxWidth: =0
+                    LayoutMinHeight: =16
+                    LayoutMinWidth: =16
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingBottom: =8
+                    PaddingLeft: =8
+                    PaddingRight: =8
+                    PaddingTop: =8
+                    ZIndex: =3
+
+                    txt_HR_SearchCandidate As text:
+                        BorderColor: |-
+                            =ColorValue("#CBD5E1")
+                        Default: =
+                        Fill: |-
+                            =ColorValue("#FFFFFF")
+                        FillPortions: =2
+                        Height: =44
+                        HintText: ="Search candidate name or email..."
+                        LayoutMaxHeight: =0
+                        LayoutMaxWidth: =0
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        RadiusBottomLeft: =8
+                        RadiusBottomRight: =8
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        ZIndex: =1
+
+                    drp_HR_FilterDept As dropdown:
+                        BorderColor: |-
+                            =ColorValue("#CBD5E1")
+                        Fill: |-
+                            =ColorValue("#FFFFFF")
+                        Height: =44
+                        Items: =["All Departments", "Engineering", "Human Resources", "Finance", "Information Technology", "Operations", "Research"]
+                        LayoutMaxHeight: =0
+                        LayoutMaxWidth: =0
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        ZIndex: =2
+
+                "gal_HR_Roster As gallery.'BrowseLayout_Vertical_TwoTextOneImageVariant_ver5.0'":
+                    DelayItemLoading: =true
+                    Items: |-
+                        =Filter(
+                            'Onboarding Tracker',
+                            (drp_HR_FilterDept.Selected.Value = "All Departments" || Department.Value = drp_HR_FilterDept.Selected.Value) &&
+                            (IsBlank(txt_HR_SearchCandidate.Text) || txt_HR_SearchCandidate.Text in Title || txt_HR_SearchCandidate.Text in PersonalEmail)
+                        )
+                    Layout: =Layout.Vertical
+                    LayoutMaxHeight: =0
+                    LayoutMaxWidth: =0
+                    LayoutMinHeight: =16
+                    LayoutMinWidth: =16
+                    LoadingSpinner: =LoadingSpinner.Data
+                    ShowScrollbar: =false
+                    TemplatePadding: =6
+                    TemplateSize: =80
+                    Width: =Parent.Width
+                    ZIndex: =4
+
+                    con_HR_RosterCard As groupContainer.horizontalAutoLayoutContainer:
+                        BorderColor: |-
+                            =ColorValue("#E2E8F0")
+                        BorderThickness: =1
+                        Fill: |-
+                            =ColorValue("#FFFFFF")
+                        LayoutAlignItems: =LayoutAlignItems.Center
+                        LayoutGap: =16
+                        LayoutGridColumnMinWidth: =0
+                        LayoutGridColumns: =6
+                        LayoutGridRowMinHeight: =0
+                        LayoutGridRows: =6
+                        LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                        LayoutMode: =LayoutMode.Auto
+                        LayoutOverflowY: =LayoutOverflow.Scroll
+                        PaddingBottom: =8
+                        PaddingLeft: =20
+                        PaddingRight: =20
+                        PaddingTop: =8
+                        RadiusBottomLeft: =20
+                        RadiusBottomRight: =20
+                        RadiusTopLeft: =8
+                        RadiusTopRight: =8
+                        Width: =Parent.TemplateWidth - 16
+                        X: =8
+                        Y: =4
+                        ZIndex: =2
+
+                        con_HR_RosterInfo As groupContainer.verticalAutoLayoutContainer:
+                            LayoutAlignItems: =LayoutAlignItems.Center
+                            LayoutDirection: =LayoutDirection.Vertical
+                            LayoutGap: =2
+                            LayoutGridColumnMinWidth: =0
+                            LayoutGridColumns: =6
+                            LayoutGridRowMinHeight: =0
+                            LayoutGridRows: =6
+                            LayoutMaxHeight: =0
+                            LayoutMaxWidth: =0
+                            LayoutMinHeight: =16
+                            LayoutMinWidth: =16
+                            LayoutMode: =LayoutMode.Auto
+                            PaddingBottom: =8
+                            PaddingRight: =12
+                            PaddingTop: =8
+                            ZIndex: =1
+
+                            lbl_HR_CandidateName As label:
+                                AlignInContainer: =AlignInContainer.Start
+                                Color: |-
+                                    =ColorValue("#0F172A")
+                                FontWeight: =FontWeight.Semibold
+                                LayoutMaxHeight: =0
+                                LayoutMaxWidth: =0
+                                LayoutMinHeight: =16
+                                LayoutMinWidth: =16
+                                Size: =15
+                                Text: =ThisItem.Title & " (" & ThisItem.PersonalEmail & ")"
+                                Width: =Parent.Width
+                                Wrap: =false
+                                ZIndex: =1
+
+                            lbl_HR_CandidateMeta As label:
+                                AlignInContainer: =AlignInContainer.Start
+                                Color: |-
+                                    =ColorValue("#64748B")
+                                Height: =20
+                                LayoutMaxHeight: =0
+                                LayoutMaxWidth: =0
+                                LayoutMinHeight: =16
+                                LayoutMinWidth: =16
+                                Size: =12
+                                Text: |-
+                                    =ThisItem.Department.Value & " • " & ThisItem.EquipmentPreference.Value & " • Start: " & Text(ThisItem.StartDate, "mmm dd, yyyy")
+                                Width: =400
+                                Wrap: =false
+                                ZIndex: =2
+
+                        lbl_HR_StatusBadge As label:
+                            Align: =Align.Center
+                            AlignInContainer: =AlignInContainer.Center
+                            Color: |-
+                                =Switch(ThisItem.OnboardingStatus.Value, "Approved", ColorValue("#166534"), "Pending Approval", ColorValue("#92400E"), ColorValue("#991B1B"))
+                            Fill: |-
+                                =Switch(ThisItem.OnboardingStatus.Value, "Approved", ColorValue("#DCFCE7"), "Pending Approval", ColorValue("#FEF3C7"), ColorValue("#FEE2E2"))
+                            FontWeight: =FontWeight.Bold
+                            LayoutMaxHeight: =0
+                            LayoutMaxWidth: =0
+                            LayoutMinHeight: =16
+                            LayoutMinWidth: =16
+                            PaddingBottom: =4
+                            PaddingLeft: =10
+                            PaddingRight: =10
+                            PaddingTop: =4
+                            Size: =11
+                            Text: =Upper(ThisItem.OnboardingStatus.Value)
+                            Width: =140
+                            ZIndex: =2
+
+                        btn_HR_ManualDispatch As button:
+                            BorderColor: |-
+                                =ColorValue("#E2E8F0")
+                            BorderThickness: =1
+                            Color: |-
+                                =ColorValue("#4F46E5")
+                            Fill: |-
+                                =ColorValue("#F8FAFC")
+                            HoverFill: |-
+                                =ColorValue("#EEF2FF")
+                            LayoutMaxHeight: =0
+                            LayoutMaxWidth: =0
+                            LayoutMinHeight: =16
+                            LayoutMinWidth: =16
+                            OnSelect: |-
+                                =Patch(
+                                    'Onboarding Tracker',
+                                    ThisItem,
+                                    {
+                                        OnboardingStatus: {
+                                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                            Value: "Approved"
+                                        }
+                                    }
+                                );
+                                Notify("Welcome packet generation re-triggered for " & ThisItem.Title, NotificationType.Success)
+                            Size: =12
+                            Text: ="Re-send Packet"
+                            ZIndex: =3
+

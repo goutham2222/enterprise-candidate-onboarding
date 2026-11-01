@@ -1,0 +1,309 @@
+{
+  "name": "02-manager-escalator-definition",
+  "displayName": "Manager Approval Escalator",
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "contentVersion": "1.0.0.0",
+    "triggers": {
+      "When_an_item_is_created": {
+        "recurrence": { "frequency": "Minute", "interval": 1 },
+        "splitOn": "@triggerOutputs()?['body/value']",
+        "type": "OpenApiConnection",
+        "inputs": {
+          "parameters": {
+            "dataset": "https://{{ORGANIZATION}}.sharepoint.com/sites/OnboardingTracker",
+            "table": "{{ONBOARDING_TRACKER_LIST_GUID}}"
+          },
+          "host": {
+            "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+            "connectionName": "shared_sharepointonline",
+            "operationId": "GetOnNewItems"
+          }
+        }
+      }
+    },
+    "actions": {
+      "Scope": {
+        "type": "Scope",
+        "actions": {
+          "Do_until": {
+            "actions": {
+              "Delay": { "runAfter": { "Get_item": ["Succeeded"] }, "type": "Wait", "inputs": { "interval": { "count": 1, "unit": "Minute" } } },
+              "Get_item": {
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "parameters": {
+                    "dataset": "https://{{ORGANIZATION}}.sharepoint.com/sites/OnboardingTracker",
+                    "table": "{{ONBOARDING_TRACKER_LIST_GUID}}",
+                    "id": "@triggerBody()?['ID']"
+                  },
+                  "host": {
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                    "connectionName": "shared_sharepointonline",
+                    "operationId": "GetItem"
+                  }
+                }
+              }
+            },
+            "expression": "@or(equals(outputs('Get_item')?['body/OnboardingStatus/Value'],'Approved'), equals(outputs('Get_item')?['body/OnboardingStatus/Value'],'Rejected'))",
+            "limit": { "count": 576, "timeout": "P2D" },
+            "type": "Until"
+          },
+          "Check_Dashboard_Decision": {
+            "runAfter": { "Do_until": ["Succeeded"] },
+            "type": "If",
+            "expression": { "and": [{ "equals": ["@outputs('Get_item')?['body/OnboardingStatus/Value']", "Approved"] }] },
+            "actions": {
+              "Terminate": { "type": "Terminate", "inputs": { "runStatus": "Succeeded" } }
+            },
+            "else": {
+              "actions": {
+                "Condition_3": {
+                  "type": "If",
+                  "expression": { "and": [{ "equals": ["@outputs('Get_item')?['body/OnboardingStatus/Value']", "Rejected"] }] },
+                  "actions": {
+                    "Send_an_email_(V2)_1": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "emailMessage/To": "@triggerBody()?['PersonalEmail']",
+                          "emailMessage/Subject": "Onboarding Request Rejected - @{triggerBody()?['Title']}",
+                          "emailMessage/Body": "<p>We could not verify some of the details you shared. Please submit your details again.</p>"
+                        },
+                        "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365", "connectionName": "shared_office365", "operationId": "SendEmailV2" }
+                      }
+                    },
+                    "Terminate_1": {
+                      "runAfter": { "Send_an_email_(V2)_1": ["Succeeded"] },
+                      "type": "Terminate",
+                      "inputs": { "runStatus": "Succeeded" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "Create_Manager_Approval": {
+            "limit": { "timeout": "P2D" },
+            "type": "OpenApiConnectionWebhook",
+            "inputs": {
+              "parameters": {
+                "optionsEmailSubscription/Message/To": "@triggerBody()?['ManagerEmail/Email']",
+                "optionsEmailSubscription/Message/Subject": "Action Required: Onboarding Approval for @{triggerBody()?['Title']}",
+                "optionsEmailSubscription/Message/Options": "Approve, Reject",
+                "optionsEmailSubscription/Message/Body": "A new hire requires verification.\n- Candidate: @{triggerBody()?['Title']}\n- Department: @{triggerBody()?['Department/Value']}\n- Start Date: @{triggerBody()?['StartDate']}\n- Requested Hardware: @{triggerBody()?['EquipmentPreference/Value']}"
+              },
+              "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365", "connectionName": "shared_office365", "operationId": "SendMailWithOptions" }
+            }
+          },
+          "Update_item_3": {
+            "runAfter": { "Create_Manager_Approval": ["Succeeded"] },
+            "type": "OpenApiConnection",
+            "inputs": {
+              "parameters": {
+                "dataset": "https://{{ORGANIZATION}}.sharepoint.com/sites/OnboardingTracker",
+                "table": "{{ONBOARDING_TRACKER_LIST_GUID}}",
+                "id": "@triggerBody()?['ID']",
+                "item/Title": "@triggerBody()?['Title']",
+                "item/OnboardingStatus/Value": "@if(equals(outputs('Create_Manager_Approval')?['body/SelectedOption'], 'Approve'), 'Approved', 'Rejected')"
+              },
+              "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline", "connectionName": "shared_sharepointonline", "operationId": "PatchItem" }
+            }
+          },
+          "Send_Reminder_Email_to_Manager": {
+            "runAfter": { "Create_Manager_Approval": ["TimedOut"] },
+            "type": "OpenApiConnection",
+            "inputs": {
+              "parameters": {
+                "emailMessage/To": "@triggerBody()?['ManagerEmail/Email']",
+                "emailMessage/Subject": "REMINDER (48 hrs): Onboarding Approval Pending for @{triggerBody()?['Title']}",
+                "emailMessage/Body": "<p>Reminder: Approval is pending review. If no action is taken within 48 hours, it will escalate to HR.</p>"
+              },
+              "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365", "connectionName": "shared_office365", "operationId": "SendEmailV2" }
+            }
+          },
+          "Create_Reminder_for_Manager_Approval": {
+            "runAfter": { "Send_Reminder_Email_to_Manager": ["Succeeded"] },
+            "limit": { "timeout": "P2D" },
+            "type": "OpenApiConnectionWebhook",
+            "inputs": {
+              "parameters": {
+                "optionsEmailSubscription/Message/To": "@triggerBody()?['ManagerEmail/Email']",
+                "optionsEmailSubscription/Message/Subject": "Action Required: Onboarding Approval for @{triggerBody()?['Title']}",
+                "optionsEmailSubscription/Message/Options": "Approve, Reject"
+              },
+              "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365", "connectionName": "shared_office365", "operationId": "SendMailWithOptions" }
+            }
+          },
+          "Update_item_1": {
+            "runAfter": { "Create_Reminder_for_Manager_Approval": ["Succeeded"] },
+            "type": "OpenApiConnection",
+            "inputs": {
+              "parameters": {
+                "dataset": "https://{{ORGANIZATION}}.sharepoint.com/sites/OnboardingTracker",
+                "table": "{{ONBOARDING_TRACKER_LIST_GUID}}",
+                "id": "@triggerBody()?['ID']",
+                "item/Title": "@triggerBody()?['Title']",
+                "item/OnboardingStatus/Value": "@if(equals(outputs('Create_Reminder_for_Manager_Approval')?['body/SelectedOption'], 'Approve'), 'Approved', 'Rejected')"
+              },
+              "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline", "connectionName": "shared_sharepointonline", "operationId": "PatchItem" }
+            }
+          },
+          "Send_Escalation_Notice_to_HR_and_Manager": {
+            "runAfter": { "Create_Reminder_for_Manager_Approval": ["TimedOut"] },
+            "type": "OpenApiConnection",
+            "inputs": {
+              "parameters": {
+                "emailMessage/To": "peopleops@organization.com",
+                "emailMessage/Subject": "ESCALATION (96 hrs): Onboarding Approval Overdue for @{triggerBody()?['Title']}",
+                "emailMessage/Body": "<p>SLA window exceeded. Approval escalated to HR.</p>",
+                "emailMessage/Importance": "High"
+              },
+              "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365", "connectionName": "shared_office365", "operationId": "SendEmailV2" }
+            }
+          },
+          "Update_item": {
+            "runAfter": { "Send_Escalation_Notice_to_HR_and_Manager": ["Succeeded"] },
+            "type": "OpenApiConnection",
+            "inputs": {
+              "parameters": {
+                "dataset": "https://{{ORGANIZATION}}.sharepoint.com/sites/OnboardingTracker",
+                "table": "{{ONBOARDING_TRACKER_LIST_GUID}}",
+                "id": "@triggerBody()?['ID']",
+                "item/Title": "@triggerBody()?['Title']",
+                "item/OnboardingStatus/Value": "Escalated to HR"
+              },
+              "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline", "connectionName": "shared_sharepointonline", "operationId": "PatchItem" }
+            }
+          },
+          "Send_Approval_to_HR_(Escalation)": {
+            "runAfter": { "Update_item": ["Succeeded"] },
+            "limit": { "timeout": "P2D" },
+            "type": "OpenApiConnectionWebhook",
+            "inputs": {
+              "parameters": {
+                "optionsEmailSubscription/Message/To": "peopleops@organization.com",
+                "optionsEmailSubscription/Message/Subject": "ESCALATION: Onboarding Approval for @{triggerBody()?['Title']}",
+                "optionsEmailSubscription/Message/Options": "Approve, Reject"
+              },
+              "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365", "connectionName": "shared_office365", "operationId": "SendMailWithOptions" }
+            }
+          },
+          "Update_item_2": {
+            "runAfter": { "Send_Approval_to_HR_(Escalation)": ["Succeeded"] },
+            "type": "OpenApiConnection",
+            "inputs": {
+              "parameters": {
+                "dataset": "https://{{ORGANIZATION}}.sharepoint.com/sites/OnboardingTracker",
+                "table": "{{ONBOARDING_TRACKER_LIST_GUID}}",
+                "id": "@triggerBody()?['ID']",
+                "item/Title": "@triggerBody()?['Title']",
+                "item/OnboardingStatus/Value": "@if(equals(outputs('Send_Approval_to_HR_(Escalation)')?['body/SelectedOption'], 'Approve'), 'Approved', 'Rejected')"
+              },
+              "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline", "connectionName": "shared_sharepointonline", "operationId": "PatchItem" }
+            }
+          },
+          "Get_Latest_Status": {
+            "runAfter": {
+              "Update_item_2": ["Succeeded", "TimedOut", "Skipped"],
+              "Update_item_1": ["Succeeded", "TimedOut", "Skipped"],
+              "Update_item_3": ["Succeeded", "TimedOut", "Skipped"],
+              "Send_Approval_to_HR_(Escalation)": ["Succeeded", "TimedOut", "Skipped"]
+            },
+            "type": "OpenApiConnection",
+            "inputs": {
+              "parameters": {
+                "dataset": "https://{{ORGANIZATION}}.sharepoint.com/sites/OnboardingTracker",
+                "table": "{{ONBOARDING_TRACKER_LIST_GUID}}",
+                "id": "@triggerBody()?['ID']"
+              },
+              "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline", "connectionName": "shared_sharepointonline", "operationId": "GetItem" }
+            }
+          },
+          "Condition": {
+            "runAfter": { "Get_Latest_Status": ["Succeeded"] },
+            "type": "If",
+            "expression": { "and": [{ "equals": ["@outputs('Get_Latest_Status')?['body/OnboardingStatus/Value']", "Approved"] }] },
+            "actions": {},
+            "else": {
+              "actions": {
+                "Condition_1": {
+                  "type": "If",
+                  "expression": { "and": [{ "equals": ["@outputs('Get_Latest_Status')?['body/OnboardingStatus/Value']", "Reject"] }] },
+                  "actions": {
+                    "Send_Onboarding_Rejected_Email": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "parameters": {
+                          "emailMessage/To": "@triggerBody()?['PersonalEmail']",
+                          "emailMessage/Subject": "Onboarding Request Rejected",
+                          "emailMessage/Body": "<p>We could not verify some of the details you shared. Please submit your details again.</p>"
+                        },
+                        "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365", "connectionName": "shared_office365", "operationId": "SendEmailV2" }
+                      }
+                    }
+                  },
+                  "else": {
+                    "actions": {
+                      "Send_an_email_(V2)": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "parameters": {
+                            "emailMessage/To": "peopleops@organization.com",
+                            "emailMessage/Subject": "SYSTEM ALERT: Onboarding Flow Halted",
+                            "emailMessage/Body": "<p>Manual intervention is required to complete verification.</p>"
+                          },
+                          "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365", "connectionName": "shared_office365", "operationId": "SendEmailV2" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Scope_Catch": {
+        "runAfter": { "Scope": ["TimedOut", "Skipped", "Failed"] },
+        "type": "Scope",
+        "actions": {
+          "Update_item_4": {
+            "type": "OpenApiConnection",
+            "inputs": {
+              "parameters": {
+                "dataset": "https://{{ORGANIZATION}}.sharepoint.com/sites/OnboardingTracker",
+                "table": "{{ONBOARDING_TRACKER_LIST_GUID}}",
+                "id": "@triggerBody()?['ID']",
+                "item/Title": "@triggerBody()?['Title']",
+                "item/OnboardingStatus/Value": "Error / Manual Review Required"
+              },
+              "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline", "connectionName": "shared_sharepointonline", "operationId": "PatchItem" }
+            }
+          },
+          "Send_an_email_(V2)_2": {
+            "runAfter": { "Update_item_4": ["Succeeded"] },
+            "type": "OpenApiConnection",
+            "inputs": {
+              "parameters": {
+                "emailMessage/To": "peopleops@organization.com",
+                "emailMessage/Subject": "CRITICAL: Onboarding Pipeline Failure - Candidate @{triggerBody()?['Title']}",
+                "emailMessage/Body": "<p>An automated onboarding approval task encountered an unhandled exception or critical timeout.</p>",
+                "emailMessage/Importance": "High"
+              },
+              "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365", "connectionName": "shared_office365", "operationId": "SendEmailV2" }
+            }
+          },
+          "Terminate_2": {
+            "runAfter": { "Send_an_email_(V2)_2": ["Succeeded"] },
+            "type": "Terminate",
+            "inputs": {
+              "runStatus": "Failed",
+              "runError": { "code": "500", "message": "Workflow execution aborted due to unhandled failure inside Scope_Try." }
+            }
+          }
+        }
+      }
+    }
+  }
+}

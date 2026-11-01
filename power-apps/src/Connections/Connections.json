@@ -1,0 +1,51 @@
+{
+  "1db08c98-b231-4a77-b09f-fa9795860cb3": {
+    "appActions": [
+      "providers/PowerPlatform.Governance/Operations/Read",
+      "providers/PowerPlatform.Governance/Operations/Write"
+    ],
+    "connectionRef": {
+      "apiTier": "Standard",
+      "displayName": "SharePoint",
+      "iconUri": "https://static.powerapps.com/resource/ppcr/releases/v1.0.1827/1.0.1827.4913/sharepointonline/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_sharepointonline",
+      "parameterHints": {},
+      "parameterHintsV2": {}
+    },
+    "datasets": {
+      "https://{{ORGANIZATION}}.sharepoint.com/sites/OnboardingTracker": {
+        "dataSources": {
+          "Onboarding Tracker": {
+            "tableName": "{{ONBOARDING_TRACKER_LIST_GUID}}"
+          }
+        }
+      }
+    },
+    "dataSources": [
+      "Onboarding Tracker"
+    ],
+    "dependencies": {},
+    "dependents": [],
+    "id": "1db08c98-b231-4a77-b09f-fa9795860cb3"
+  },
+  "41a098ee-daa6-4c51-b680-77a0d735174b": {
+    "appActions": [
+      "SearchUser"
+    ],
+    "connectionRef": {
+      "apiTier": "Standard",
+      "displayName": "Office 365 Users",
+      "iconUri": "https://static.powerapps.com/resource/ppcr/releases/v1.0.1818/1.0.1818.4788/office365users/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_office365users",
+      "parameterHints": {},
+      "parameterHintsV2": {}
+    },
+    "datasets": {},
+    "dataSources": [
+      "Office365Users"
+    ],
+    "dependencies": {},
+    "dependents": [],
+    "id": "41a098ee-daa6-4c51-b680-77a0d735174b"
+  }
+}

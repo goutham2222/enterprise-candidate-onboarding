@@ -1,0 +1,433 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  scr_Intake:
+    Properties:
+      Fill: =ColorValue("#F8FAFC")
+      LoadingSpinnerColor: =RGBA(56, 96, 178, 1)
+    Children:
+      - con_Intake_Main:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            Fill: =gblTheme.CanvasBg
+            Height: =Parent.Height
+            LayoutAlignItems: =LayoutAlignItems.Stretch
+            LayoutDirection: =LayoutDirection.Vertical
+            PaddingBottom: =8
+            PaddingLeft: =8
+            PaddingRight: =8
+            PaddingTop: =8
+            Width: =Parent.Width
+          Children:
+            - con_Intake_Navbar:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  AlignInContainer: =AlignInContainer.SetByContainer
+                  BorderColor: =gblTheme.Border
+                  BorderThickness: =1
+                  Fill: =gblTheme.SurfaceBg
+                  FillPortions: =0
+                  Height: =68
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutMaxHeight: =68
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  PaddingBottom: =8
+                  PaddingLeft: =32
+                  PaddingRight: =32
+                  PaddingTop: =8
+                  Width: =Parent.Width
+                Children:
+                  - lbl_NavLogo:
+                      Control: Label@2.5.1
+                      Properties:
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =ColorValue("#0F172A")
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =16
+                        Text: ="TALENTFLOW"
+                        Width: =160
+                        Wrap: =false
+                  - lbl_NavDivider:
+                      Control: Label@2.5.1
+                      Properties:
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =ColorValue("#CBD5E1")
+                        Font: =Font.'Open Sans'
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =16
+                        Text: ="|"
+                        Width: =20
+                  - lbl_NavSubtitle:
+                      Control: Label@2.5.1
+                      Properties:
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =ColorValue("#64748B")
+                        FillPortions: =1
+                        Font: =Font.'Open Sans'
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Text: ="Candidate Intake Portal"
+                        Wrap: =false
+                  - btn_NavManagerQueue:
+                      Control: Label@2.5.1
+                      Properties:
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =ColorValue("#4F46E5")
+                        Fill: =ColorValue("#EEF2FF")
+                        Font: =Font.'Open Sans'
+                        HoverFill: =ColorValue("#E0E7FF")
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_ManagerQueue, ScreenTransition.Fade)
+                        PaddingLeft: =12
+                        PaddingRight: =12
+                        Text: ="Manager View →"
+                        Visible: |-
+                          =// Only visible if the logged-in user is an HR admin or is assigned as a manager for at least one candidate
+                          Lower(User().Email) = Lower("peopleops@organization.com") ||
+                          !IsEmpty(Filter('Onboarding Tracker', ManagerEmail.Email = User().Email))
+                        Width: =170
+            - con_Intake_ScrollArea:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  AlignInContainer: =AlignInContainer.SetByContainer
+                  Height: =Parent.Height - 68
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  LayoutOverflowY: =LayoutOverflow.Scroll
+                  PaddingBottom: =8
+                  PaddingLeft: =8
+                  PaddingRight: =8
+                  PaddingTop: =8
+                  Width: =Parent.Width
+                Children:
+                  - con_Intake_Card:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        BorderColor: =ColorValue("#E2E8F0")
+                        BorderThickness: =1
+                        Fill: =ColorValue("#FFFFFF")
+                        LayoutAlignItems: =LayoutAlignItems.Stretch
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =14
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        LayoutOverflowY: =LayoutOverflow.Scroll
+                        PaddingBottom: =36
+                        PaddingLeft: =36
+                        PaddingRight: =36
+                        PaddingTop: =36
+                        RadiusBottomLeft: =12
+                        RadiusBottomRight: =12
+                        RadiusTopLeft: =12
+                        RadiusTopRight: =12
+                        Width: =Min(Parent.Width - 48, 640)
+                      Children:
+                        - lbl_CardTitle:
+                            Control: Label@2.5.1
+                            Properties:
+                              BorderColor: =RGBA(0, 18, 107, 1)
+                              Color: =ColorValue("#0F172A")
+                              Font: =Font.'Segoe UI'
+                              FontWeight: =FontWeight.Semibold
+                              Height: =44
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Size: =22
+                              Text: ="Register New Placement"
+                              Wrap: =false
+                        - lbl_CardSubtitle:
+                            Control: Label@2.5.1
+                            Properties:
+                              BorderColor: =RGBA(0, 18, 107, 1)
+                              Color: =ColorValue("#64748B")
+                              Font: =Font.'Open Sans'
+                              Height: =36
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Text: ="Enter candidate details and verify reporting manager for institutional onboarding."
+                        - lbl_Name:
+                            Control: Label@2.5.1
+                            Properties:
+                              BorderColor: =RGBA(0, 18, 107, 1)
+                              Color: =ColorValue("#334155")
+                              Font: =Font.'Open Sans'
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Text: ="Candidate Full Name"
+                              Wrap: =false
+                        - txt_CandidateName:
+                            Control: Classic/TextInput@2.3.2
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              BorderColor: =ColorValue("#CBD5E1")
+                              BorderThickness: =1
+                              Color: =ColorValue("#0F172A")
+                              Default: =
+                              Fill: =ColorValue("#FFFFFF")
+                              FocusedBorderThickness: =2
+                              Font: =Font.'Open Sans'
+                              Height: =44
+                              HintText: ="e.g., Alex Johnson"
+                              HoverBorderColor: =ColorValue("#4F46E5")
+                              HoverFill: =RGBA(186, 202, 226, 1)
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Size: =14
+                        - lbl_Email:
+                            Control: Label@2.5.1
+                            Properties:
+                              BorderColor: =RGBA(0, 18, 107, 1)
+                              Color: =ColorValue("#334155")
+                              Font: =Font.'Open Sans'
+                              Height: =24
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Text: ="Personal Email Address"
+                              Wrap: =false
+                        - txt_CandidateEmail:
+                            Control: Classic/TextInput@2.3.2
+                            Properties:
+                              BorderColor: =ColorValue("#CBD5E1")
+                              BorderThickness: =1
+                              Color: =ColorValue("#0F172A")
+                              Default: =
+                              Fill: =ColorValue("#FFFFFF")
+                              FocusedBorderThickness: =2
+                              Font: =Font.'Open Sans'
+                              Height: =44
+                              HintText: ="e.g., alex.johnson@gmail.com"
+                              HoverBorderColor: =ColorValue("#4F46E5")
+                              HoverFill: =RGBA(186, 202, 226, 1)
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Size: =14
+                        - con_Row_DeptHardware:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              AlignInContainer: =AlignInContainer.SetByContainer
+                              FillPortions: =0
+                              Height: =110
+                              LayoutAlignItems: =LayoutAlignItems.Stretch
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutGap: =16
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              PaddingTop: =8
+                              Width: =Parent.Width
+                            Children:
+                              - con_Col_Dept:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.SetByContainer
+                                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutGap: =4
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =8
+                                    PaddingLeft: =8
+                                    PaddingRight: =8
+                                    PaddingTop: =8
+                                  Children:
+                                    - lbl_Dept:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          BorderColor: =RGBA(0, 18, 107, 1)
+                                          Color: =ColorValue("#334155")
+                                          Font: =Font.'Open Sans'
+                                          Height: =24
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Text: ="Assigned Department"
+                                          Wrap: =false
+                                    - drp_Department:
+                                        Control: Classic/DropDown@2.3.1
+                                        Properties:
+                                          BorderColor: =ColorValue("#CBD5E1")
+                                          BorderThickness: =1
+                                          ChevronBackground: =RGBA(56, 96, 178, 1)
+                                          ChevronFill: =RGBA(255, 255, 255, 1)
+                                          ChevronHoverBackground: =ColorFade(RGBA(56, 96, 178, 1), -20%)
+                                          ChevronHoverFill: =RGBA(255, 255, 255, 1)
+                                          Color: =ColorValue("#0F172A")
+                                          Fill: =ColorValue("#FFFFFF")
+                                          Font: =Font.'Open Sans'
+                                          Height: =44
+                                          HoverFill: =RGBA(186, 202, 226, 1)
+                                          Items: =["Engineering", "Product", "Design", "Operations", "Human Resources", "Finance", "Information Technology", "Operations"]
+                                          Items.Value: =Value
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedColor: =RGBA(255, 255, 255, 1)
+                                          PressedFill: =RGBA(0, 18, 107, 1)
+                                          SelectionColor: =RGBA(255, 255, 255, 1)
+                                          SelectionFill: =RGBA(56, 96, 178, 1)
+                                          Size: =14
+                              - con_Col_Hardware:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.SetByContainer
+                                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutGap: =4
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =8
+                                    PaddingLeft: =8
+                                    PaddingRight: =8
+                                    PaddingTop: =8
+                                  Children:
+                                    - lbl_Hardware:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          BorderColor: =RGBA(0, 18, 107, 1)
+                                          Color: =ColorValue("#334155")
+                                          Font: =Font.'Open Sans'
+                                          Height: =24
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Text: ="Hardware Provisioning"
+                                          Wrap: =false
+                                    - drp_Hardware:
+                                        Control: Classic/DropDown@2.3.1
+                                        Properties:
+                                          BorderColor: =ColorValue("#CBD5E1")
+                                          BorderThickness: =1
+                                          ChevronBackground: =RGBA(56, 96, 178, 1)
+                                          ChevronFill: =RGBA(255, 255, 255, 1)
+                                          ChevronHoverBackground: =ColorFade(RGBA(56, 96, 178, 1), -20%)
+                                          ChevronHoverFill: =RGBA(255, 255, 255, 1)
+                                          Color: =ColorValue("#0F172A")
+                                          Fill: =ColorValue("#FFFFFF")
+                                          Font: =Font.'Open Sans'
+                                          Height: =44
+                                          HoverFill: =RGBA(186, 202, 226, 1)
+                                          Items: =["MacBook Pro 16", "MacBook Pro 14", "Dell XPS 15", "Lenovo ThinkPad P1", "High-Performance Linux Workstation"]
+                                          Items.Value: =Value
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PressedColor: =RGBA(255, 255, 255, 1)
+                                          PressedFill: =RGBA(0, 18, 107, 1)
+                                          SelectionColor: =RGBA(255, 255, 255, 1)
+                                          SelectionFill: =RGBA(56, 96, 178, 1)
+                        - lbl_StartDate:
+                            Control: Label@2.5.1
+                            Properties:
+                              BorderColor: =RGBA(0, 18, 107, 1)
+                              Color: =ColorValue("#334155")
+                              Font: =Font.'Open Sans'
+                              Height: =24
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Text: ="Official Start Date"
+                              Wrap: =false
+                        - dte_StartDate:
+                            Control: Classic/DatePicker@2.6.0
+                            Properties:
+                              BorderColor: =ColorValue("#CBD5E1")
+                              BorderThickness: =1
+                              Color: =ColorValue("#0F172A")
+                              DefaultDate: =Today() + 14
+                              Fill: =ColorValue("#FFFFFF")
+                              Font: =Font.'Open Sans'
+                              Height: =44
+                              IconBackground: =RGBA(56, 96, 178, 1)
+                              IconFill: =RGBA(255, 255, 255, 1)
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                        - lbl_ManagerSearch:
+                            Control: Label@2.5.1
+                            Properties:
+                              BorderColor: =RGBA(0, 18, 107, 1)
+                              Color: =ColorValue("#334155")
+                              Font: =Font.'Open Sans'
+                              Height: =24
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              Text: ="Reporting Manager (Entra ID Directory Search)"
+                              Wrap: =false
+                        - cmb_ManagerSearch:
+                            Control: Classic/ComboBox@2.4.0
+                            Properties:
+                              BorderColor: =ColorValue("#CBD5E1")
+                              BorderThickness: =1
+                              ChevronBackground: =RGBA(56, 96, 178, 1)
+                              ChevronFill: =RGBA(255, 255, 255, 1)
+                              ChevronHoverBackground: =ColorFade(RGBA(56, 96, 178, 1), -20%)
+                              ChevronHoverFill: =RGBA(255, 255, 255, 1)
+                              Color: =ColorValue("#0F172A")
+                              DisplayFields: =["DisplayName"]
+                              Fill: =ColorValue("#FFFFFF")
+                              Font: =Font.'Open Sans'
+                              Height: =44
+                              HoverFill: =RGBA(186, 202, 226, 1)
+                              InputTextPlaceholder: ="Type manager name or institutional email..."
+                              Items: |-
+                                =Office365Users.SearchUser({searchTerm: cmb_ManagerSearch.SearchText, top: 10})
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PressedColor: =RGBA(255, 255, 255, 1)
+                              PressedFill: =RGBA(0, 18, 107, 1)
+                              SearchFields: =["DisplayName","Mail","UserPrincipalName"]
+                              SelectMultiple: =false
+                              SelectionColor: =RGBA(255, 255, 255, 1)
+                              SelectionFill: =RGBA(56, 96, 178, 1)
+                              Size: =14
+                        - btn_SubmitOnboarding:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              BorderColor: =ColorFade(Self.Fill, -15%)
+                              BorderThickness: =0
+                              Color: =ColorValue("#FFFFFF")
+                              DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                              Fill: =ColorValue("#4F46E5")
+                              Font: =Font.'Open Sans'
+                              Height: =48
+                              HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+                              HoverColor: =RGBA(255, 255, 255, 1)
+                              HoverFill: =ColorValue("#4338CA")
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              OnSelect: "=If(\n    IsBlank(txt_CandidateName.Text) || \n    IsBlank(txt_CandidateEmail.Text) || \n    IsBlank(cmb_ManagerSearch.Selected.Mail),\n    Notify(\"Please complete all required fields, including the verified reporting manager.\", NotificationType.Error),\n    \n    Patch(\n        'Onboarding Tracker',\n        Defaults('Onboarding Tracker'),\n        {\n            Title: Trim(txt_CandidateName.Text),\n            PersonalEmail: Trim(txt_CandidateEmail.Text),\n            Department: {\n                '@odata.type': \"#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference\",\n                Value: drp_Department.Selected.Value\n            },\n            StartDate: dte_StartDate.SelectedDate,\n            EquipmentPreference: {\n                '@odata.type': \"#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference\",\n                Value: drp_Hardware.Selected.Value\n            },\n            ManagerEmail: {\n    '@odata.type': \"#Microsoft.Azure.Connectors.SharePoint.SPListExpandedUser\",\n    Claims: \"i:0#.f|membership|\" & cmb_ManagerSearch.Selected.UserPrincipalName,\n    Department: \"\",\n    DisplayName: cmb_ManagerSearch.Selected.DisplayName,\n    Email: cmb_ManagerSearch.Selected.Mail,\n    JobTitle: \"\",\n    Picture: \"\"\n},\n            OnboardingStatus: {\n                '@odata.type': \"#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference\",\n                Value: \"Pending Approval\"\n            }\n        }\n    );\n    Notify(\"Onboarding request for \" & txt_CandidateName.Text & \" successfully dispatched!\", NotificationType.Success);\n    Reset(txt_CandidateName);\n    Reset(txt_CandidateEmail);\n    Reset(cmb_ManagerSearch);\n)"
+                              PressedBorderColor: =Self.Fill
+                              PressedColor: =Self.Fill
+                              PressedFill: =Self.Color
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                              Size: =14
+                              Text: ="Submit Onboarding Record"

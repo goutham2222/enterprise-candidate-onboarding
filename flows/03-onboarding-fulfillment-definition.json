@@ -1,0 +1,68 @@
+{
+  "name": "03-onboarding-fulfillment-definition",
+  "displayName": "Onboarding Fulfillment Engine",
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "contentVersion": "1.0.0.0",
+    "triggers": {
+      "When_an_item_is_created_or_modified": {
+        "recurrence": { "frequency": "Minute", "interval": 1 },
+        "splitOn": "@triggerOutputs()?['body/value']",
+        "type": "OpenApiConnection",
+        "inputs": {
+          "parameters": {
+            "dataset": "https://{{ORGANIZATION}}.sharepoint.com/sites/OnboardingTracker",
+            "table": "{{ONBOARDING_TRACKER_LIST_GUID}}"
+          },
+          "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline", "connectionName": "shared_sharepointonline", "operationId": "GetOnUpdatedItems" }
+        },
+        "conditions": [
+          { "expression": "@equals(triggerBody()?['OnboardingStatus']?['Value'], 'Approved')" }
+        ]
+      }
+    },
+    "actions": {
+      "Create_file": {
+        "runAfter": {},
+        "type": "OpenApiConnection",
+        "inputs": {
+          "parameters": {
+            "folderPath": "/",
+            "name": "WelcomePacket_@{triggerOutputs()?['body/Title']}.html",
+            "body": "<!DOCTYPE html><html><body><h1>Welcome to the Team!</h1><p>Candidate: @{triggerOutputs()?['body/Title']}</p><p>Department: @{triggerOutputs()?['body/Department/Value']}</p><p>Hardware: @{triggerOutputs()?['body/EquipmentPreference/Value']}</p></body></html>"
+          },
+          "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_onedriveforbusiness", "connectionName": "shared_onedriveforbusiness", "operationId": "CreateFile" }
+        }
+      },
+      "Convert_file": {
+        "runAfter": { "Create_file": ["Succeeded"] },
+        "type": "OpenApiConnection",
+        "inputs": {
+          "parameters": { "id": "@outputs('Create_file')?['body/Id']", "type": "PDF" },
+          "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_onedriveforbusiness", "connectionName": "shared_onedriveforbusiness", "operationId": "ConvertFile" }
+        }
+      },
+      "Send_an_email_(V2)": {
+        "runAfter": { "Convert_file": ["Succeeded"] },
+        "type": "OpenApiConnection",
+        "inputs": {
+          "parameters": {
+            "emailMessage/To": "@triggerOutputs()?['body/PersonalEmail']",
+            "emailMessage/Subject": "Welcome to the Team! Next Steps for Your Onboarding",
+            "emailMessage/Body": "<p>Congratulations! Please find your official Day 1 Onboarding Packet attached as a PDF.</p>",
+            "emailMessage/Attachments": [{ "Name": "Welcome_Packet.pdf", "ContentBytes": "@body('Convert_file')" }]
+          },
+          "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365", "connectionName": "shared_office365", "operationId": "SendEmailV2" }
+        }
+      },
+      "Delete_file": {
+        "runAfter": { "Send_an_email_(V2)": ["Succeeded"] },
+        "type": "OpenApiConnection",
+        "inputs": {
+          "parameters": { "id": "@outputs('Create_file')?['body/Id']" },
+          "host": { "apiId": "/providers/Microsoft.PowerApps/apis/shared_onedriveforbusiness", "connectionName": "shared_onedriveforbusiness", "operationId": "DeleteFile" }
+        }
+      }
+    }
+  }
+}

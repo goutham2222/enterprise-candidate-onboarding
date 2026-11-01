@@ -1,0 +1,574 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  scr_HRDashboard:
+    Properties:
+      Fill: =ColorValue("#F8FAFC")
+      LoadingSpinnerColor: =RGBA(56, 96, 178, 1)
+      OnVisible: |-
+        =ClearCollect(
+            colTrackerCache,
+            'Onboarding Tracker'
+        )
+    Children:
+      - con_HR_Main:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            Fill: =ColorValue("#F8FAFC")
+            Height: =Parent.Height
+            LayoutAlignItems: =LayoutAlignItems.Stretch
+            LayoutDirection: =LayoutDirection.Vertical
+            PaddingBottom: =8
+            PaddingLeft: =8
+            PaddingRight: =8
+            PaddingTop: =8
+            Width: =Parent.Width
+          Children:
+            - con_HR_Navbar:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  AlignInContainer: =AlignInContainer.SetByContainer
+                  BorderColor: =ColorValue("#E2E8F0")
+                  BorderThickness: =1
+                  Fill: =ColorValue("#FFFFFF")
+                  FillPortions: =0
+                  Height: =68
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =12
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  PaddingLeft: =32
+                  PaddingRight: =32
+                  Width: =Parent.Width
+                Children:
+                  - lbl_HR_NavLogo:
+                      Control: Label@2.5.1
+                      Properties:
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =ColorValue("#0F172A")
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =16
+                        Text: ="TALENTFLOW"
+                        Width: =160
+                        Wrap: =false
+                        X: =40
+                        Y: =40
+                  - lbl_HR_NavDivider:
+                      Control: Label@2.5.1
+                      Properties:
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =ColorValue("#CBD5E1")
+                        Font: =Font.'Open Sans'
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =16
+                        Text: ="|"
+                        Width: =16
+                        X: =40
+                        Y: =40
+                  - lbl_HR_NavSubtitle:
+                      Control: Label@2.5.1
+                      Properties:
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =ColorValue("#64748B")
+                        FillPortions: =1
+                        Font: =Font.'Open Sans'
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Text: ="Institutional HR Operations"
+                        Width: =240
+                        Wrap: =false
+                        X: =40
+                        Y: =40
+                  - btn_HR_NavToIntake:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =ColorFade(Self.Fill, -15%)
+                        Color: =ColorValue("#0F172A")
+                        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                        Fill: =ColorValue("#F1F5F9")
+                        Font: =Font.'Open Sans'
+                        Height: =55
+                        HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+                        HoverColor: =RGBA(255, 255, 255, 1)
+                        HoverFill: =ColorFade(RGBA(56, 96, 178, 1), -20%)
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Intake, ScreenTransition.Fade)
+                        PaddingBottom: =0
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =0
+                        PressedBorderColor: =Self.Fill
+                        PressedColor: =Self.Fill
+                        PressedFill: =Self.Color
+                        Text: ="+ New Placement"
+                        Width: =175
+                        X: =40
+                        Y: =40
+                  - btn_HR_NavToManager:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =ColorFade(Self.Fill, -15%)
+                        Color: =ColorValue("#4F46E5")
+                        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                        Fill: =ColorValue("#EEF2FF")
+                        Font: =Font.'Open Sans'
+                        Height: =55
+                        HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+                        HoverColor: =RGBA(255, 255, 255, 1)
+                        HoverFill: =ColorFade(RGBA(56, 96, 178, 1), -20%)
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_ManagerQueue, ScreenTransition.Fade)
+                        PaddingBottom: =0
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =0
+                        PressedBorderColor: =Self.Fill
+                        PressedColor: =Self.Fill
+                        PressedFill: =Self.Color
+                        Size: =13
+                        Text: ="Manager Queue"
+                        Visible: =Lower(User().Email) = Lower("peopleops@organization.com")
+                        Width: =170
+                        X: =40
+                        Y: =40
+            - con_HR_ScrollArea:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  AlignInContainer: =AlignInContainer.SetByContainer
+                  Height: =Parent.Height - 68
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  PaddingBottom: =8
+                  PaddingLeft: =8
+                  PaddingRight: =8
+                  PaddingTop: =8
+                  Width: =Parent.Width
+                Children:
+                  - con_HR_Content:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        LayoutAlignItems: =LayoutAlignItems.Stretch
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =20
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        LayoutOverflowY: =LayoutOverflow.Scroll
+                        PaddingBottom: =40
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =28
+                        Visible: =Lower(User().Email) = Lower("peopleops@organization.com")
+                        Width: =Min(Parent.Width - 48, 960)
+                      Children:
+                        - con_HR_HeaderStrip:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              AlignInContainer: =AlignInContainer.SetByContainer
+                              FillPortions: =0
+                              Height: =54
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              PaddingTop: =8
+                              Width: =Parent.Width
+                            Children:
+                              - lbl_HR_PageTitle:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    BorderColor: =RGBA(0, 18, 107, 1)
+                                    Color: =ColorValue("#0F172A")
+                                    Font: =Font.'Open Sans'
+                                    FontWeight: =FontWeight.Bold
+                                    Height: =48
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =0
+                                    PaddingTop: =0
+                                    Size: =20
+                                    Text: ="Candidate Placements & Fulfillment"
+                                    Width: =500
+                                    Wrap: =false
+                        - con_HR_KPIRow:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              AlignInContainer: =AlignInContainer.SetByContainer
+                              FillPortions: =0
+                              Height: =110
+                              LayoutAlignItems: =LayoutAlignItems.Stretch
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutGap: =16
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              PaddingTop: =8
+                            Children:
+                              - con_KPI_Pending:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.SetByContainer
+                                    BorderColor: =ColorValue("#E2E8F0")
+                                    BorderThickness: =1
+                                    Fill: =ColorValue("#FFFFFF")
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutGap: =4
+                                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =8
+                                    PaddingLeft: =12
+                                    PaddingRight: =12
+                                    PaddingTop: =8
+                                    RadiusBottomLeft: =10
+                                    RadiusBottomRight: =10
+                                    RadiusTopLeft: =10
+                                    RadiusTopRight: =10
+                                  Children:
+                                    - lbl_KPI_Pending_Count:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          Align: =Align.Center
+                                          BorderColor: =RGBA(0, 18, 107, 1)
+                                          Color: =ColorValue("#D97706")
+                                          Font: =Font.'Open Sans'
+                                          FontWeight: =FontWeight.Bold
+                                          Height: =36
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =28
+                                          Text: =Text(CountRows(Filter(colTrackerCache, OnboardingStatus.Value = "Pending Approval")))
+                                          Width: =Parent.Width - 24
+                                          Wrap: =false
+                                    - lbl_KPI_Pending_Label:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          Align: =Align.Center
+                                          BorderColor: =RGBA(0, 18, 107, 1)
+                                          Color: =ColorValue("#64748B")
+                                          Font: =Font.'Open Sans'
+                                          Height: =22
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =12
+                                          Text: ="Pending Approvals"
+                                          Width: =Parent.Width - 24
+                                          Wrap: =false
+                              - con_KPI_Approved:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.SetByContainer
+                                    BorderColor: =ColorValue("#E2E8F0")
+                                    BorderThickness: =1
+                                    Fill: =ColorValue("#FFFFFF")
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutGap: =4
+                                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =8
+                                    PaddingLeft: =12
+                                    PaddingRight: =12
+                                    PaddingTop: =8
+                                    RadiusBottomLeft: =10
+                                    RadiusBottomRight: =10
+                                    RadiusTopLeft: =10
+                                    RadiusTopRight: =10
+                                  Children:
+                                    - lbl_KPI_Approved_Count:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          Align: =Align.Center
+                                          BorderColor: =RGBA(0, 18, 107, 1)
+                                          Color: =ColorValue("#16A34A")
+                                          Font: =Font.'Open Sans'
+                                          FontWeight: =FontWeight.Bold
+                                          Height: =36
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =28
+                                          Text: =Text(CountRows(Filter(colTrackerCache, OnboardingStatus.Value = "Approved")))
+                                          Width: =Parent.Width - 24
+                                    - lbl_KPI_Approved_Label:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          Align: =Align.Center
+                                          BorderColor: =RGBA(0, 18, 107, 1)
+                                          Color: =ColorValue("#64748B")
+                                          Font: =Font.'Open Sans'
+                                          Height: =22
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =12
+                                          Text: ="Packets Dispatched"
+                                          Width: =Parent.Width - 24
+                                          Wrap: =false
+                              - con_KPI_Attention:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.SetByContainer
+                                    BorderColor: =ColorValue("#E2E8F0")
+                                    BorderThickness: =1
+                                    Fill: =ColorValue("#FFFFFF")
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutGap: =4
+                                    LayoutJustifyContent: =LayoutJustifyContent.Center
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =8
+                                    PaddingLeft: =12
+                                    PaddingRight: =12
+                                    PaddingTop: =8
+                                    RadiusBottomLeft: =10
+                                    RadiusBottomRight: =10
+                                    RadiusTopLeft: =10
+                                    RadiusTopRight: =10
+                                  Children:
+                                    - lbl_KPI_Attention_Count:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          Align: =Align.Center
+                                          BorderColor: =RGBA(0, 18, 107, 1)
+                                          Color: =ColorValue("#DC2626")
+                                          Font: =Font.'Open Sans'
+                                          FontWeight: =FontWeight.Bold
+                                          Height: =36
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =28
+                                          Text: =Text(CountRows(Filter(colTrackerCache, OnboardingStatus.Value = "Rejected" || OnboardingStatus.Value = "Escalated to HR")))
+                                          Width: =Parent.Width - 24
+                                          Wrap: =false
+                                    - lbl_KPI_Attention_Label:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          Align: =Align.Center
+                                          BorderColor: =RGBA(0, 18, 107, 1)
+                                          Color: =ColorValue("#64748B")
+                                          Font: =Font.'Open Sans'
+                                          Height: =22
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          Size: =12
+                                          Text: ="Escalations / Rejected"
+                                          Width: =Parent.Width - 24
+                                          Wrap: =false
+                        - con_HR_FilterBar:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              AlignInContainer: =AlignInContainer.SetByContainer
+                              Height: =48
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutGap: =14
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              PaddingTop: =8
+                            Children:
+                              - txt_HR_SearchCandidate:
+                                  Control: Classic/TextInput@2.3.2
+                                  Properties:
+                                    BorderColor: =ColorValue("#CBD5E1")
+                                    Default: =
+                                    Fill: =ColorValue("#FFFFFF")
+                                    FillPortions: =2
+                                    Font: =Font.'Open Sans'
+                                    Height: =44
+                                    HintText: ="Search candidate name or email..."
+                                    HoverBorderColor: =RGBA(0, 18, 107, 1)
+                                    HoverFill: =RGBA(186, 202, 226, 1)
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    RadiusBottomLeft: =8
+                                    RadiusBottomRight: =8
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                              - drp_HR_FilterDept:
+                                  Control: Classic/DropDown@2.3.1
+                                  Properties:
+                                    BorderColor: =ColorValue("#CBD5E1")
+                                    ChevronBackground: =RGBA(56, 96, 178, 1)
+                                    ChevronFill: =RGBA(255, 255, 255, 1)
+                                    ChevronHoverBackground: =ColorFade(RGBA(56, 96, 178, 1), -20%)
+                                    ChevronHoverFill: =RGBA(255, 255, 255, 1)
+                                    Fill: =ColorValue("#FFFFFF")
+                                    Font: =Font.'Open Sans'
+                                    Height: =44
+                                    HoverFill: =RGBA(186, 202, 226, 1)
+                                    Items: =["All Departments", "Engineering", "Human Resources", "Finance", "Information Technology", "Operations", "Research"]
+                                    Items.Value: =Value
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PressedColor: =RGBA(255, 255, 255, 1)
+                                    PressedFill: =RGBA(0, 18, 107, 1)
+                                    SelectionColor: =RGBA(255, 255, 255, 1)
+                                    SelectionFill: =RGBA(56, 96, 178, 1)
+                        - gal_HR_Roster:
+                            Control: Gallery@2.15.0
+                            Variant: BrowseLayout_Vertical_TwoTextOneImageVariant_ver5.0
+                            Properties:
+                              BorderColor: =RGBA(0, 18, 107, 1)
+                              Items: |-
+                                =Filter(
+                                    'Onboarding Tracker',
+                                    (drp_HR_FilterDept.Selected.Value = "All Departments" || Department.Value = drp_HR_FilterDept.Selected.Value) &&
+                                    (IsBlank(txt_HR_SearchCandidate.Text) || txt_HR_SearchCandidate.Text in Title || txt_HR_SearchCandidate.Text in PersonalEmail)
+                                )
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              ShowScrollbar: =false
+                              TemplatePadding: =6
+                              TemplateSize: =80
+                              Width: =Parent.Width
+                            Children:
+                              - con_HR_RosterCard:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    BorderColor: =ColorValue("#E2E8F0")
+                                    BorderThickness: =1
+                                    Fill: =ColorValue("#FFFFFF")
+                                    LayoutAlignItems: =LayoutAlignItems.Center
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    LayoutGap: =16
+                                    LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                                    LayoutOverflowY: =LayoutOverflow.Scroll
+                                    PaddingBottom: =8
+                                    PaddingLeft: =20
+                                    PaddingRight: =20
+                                    PaddingTop: =8
+                                    RadiusBottomLeft: =20
+                                    RadiusBottomRight: =20
+                                    RadiusTopLeft: =8
+                                    RadiusTopRight: =8
+                                    Width: =Parent.TemplateWidth - 16
+                                    X: =8
+                                    Y: =4
+                                  Children:
+                                    - con_HR_RosterInfo:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Vertical
+                                          LayoutGap: =2
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PaddingBottom: =8
+                                          PaddingRight: =12
+                                          PaddingTop: =8
+                                        Children:
+                                          - lbl_HR_CandidateName:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                AlignInContainer: =AlignInContainer.Start
+                                                BorderColor: =RGBA(0, 18, 107, 1)
+                                                Color: =ColorValue("#0F172A")
+                                                Font: =Font.'Open Sans'
+                                                FontWeight: =FontWeight.Semibold
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Size: =15
+                                                Text: =ThisItem.Title & " (" & ThisItem.PersonalEmail & ")"
+                                                Width: =Parent.Width
+                                                Wrap: =false
+                                          - lbl_HR_CandidateMeta:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                AlignInContainer: =AlignInContainer.Start
+                                                BorderColor: =RGBA(0, 18, 107, 1)
+                                                Color: =ColorValue("#64748B")
+                                                Font: =Font.'Open Sans'
+                                                Height: =20
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Size: =12
+                                                Text: |-
+                                                  =ThisItem.Department.Value & " • " & ThisItem.EquipmentPreference.Value & " • Start: " & Text(ThisItem.StartDate, "mmm dd, yyyy")
+                                                Width: =400
+                                                Wrap: =false
+                                    - lbl_HR_StatusBadge:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          Align: =Align.Center
+                                          AlignInContainer: =AlignInContainer.Center
+                                          BorderColor: =RGBA(0, 18, 107, 1)
+                                          Color: =Switch(ThisItem.OnboardingStatus.Value, "Approved", ColorValue("#166534"), "Pending Approval", ColorValue("#92400E"), ColorValue("#991B1B"))
+                                          Fill: =Switch(ThisItem.OnboardingStatus.Value, "Approved", ColorValue("#DCFCE7"), "Pending Approval", ColorValue("#FEF3C7"), ColorValue("#FEE2E2"))
+                                          Font: =Font.'Open Sans'
+                                          FontWeight: =FontWeight.Bold
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PaddingBottom: =4
+                                          PaddingLeft: =10
+                                          PaddingRight: =10
+                                          PaddingTop: =4
+                                          Size: =11
+                                          Text: =Upper(ThisItem.OnboardingStatus.Value)
+                                          Width: =140
+                                    - btn_HR_ManualDispatch:
+                                        Control: Classic/Button@2.2.0
+                                        Properties:
+                                          BorderColor: =ColorValue("#E2E8F0")
+                                          BorderThickness: =1
+                                          Color: =ColorValue("#4F46E5")
+                                          DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                                          Fill: =ColorValue("#F8FAFC")
+                                          Font: =Font.'Open Sans'
+                                          HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+                                          HoverColor: =RGBA(255, 255, 255, 1)
+                                          HoverFill: =ColorValue("#EEF2FF")
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          OnSelect: |-
+                                            =Patch(
+                                                'Onboarding Tracker',
+                                                ThisItem,
+                                                {
+                                                    OnboardingStatus: {
+                                                        '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                                        Value: "Approved"
+                                                    }
+                                                }
+                                            );
+                                            Notify("Welcome packet generation re-triggered for " & ThisItem.Title, NotificationType.Success)
+                                          PressedBorderColor: =Self.Fill
+                                          PressedColor: =Self.Fill
+                                          PressedFill: =Self.Color
+                                          Size: =12
+                                          Text: ="Re-send Packet"

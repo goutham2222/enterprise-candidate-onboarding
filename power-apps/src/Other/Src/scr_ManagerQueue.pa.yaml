@@ -1,0 +1,438 @@
+# ************************************************************************************************
+# Warning: YAML source code for Canvas Apps should only be used to review changes made within Power Apps Studio and for minor edits (Preview).
+# Use the maker portal to create and edit your Power Apps.
+# 
+# The schema file for Canvas Apps is available at https://go.microsoft.com/fwlink/?linkid=2304907
+# 
+# For more information, visit https://go.microsoft.com/fwlink/?linkid=2292623
+# ************************************************************************************************
+Screens:
+  scr_ManagerQueue:
+    Properties:
+      Fill: =ColorValue("#F8FAFC")
+      LoadingSpinnerColor: =RGBA(56, 96, 178, 1)
+    Children:
+      - con_MQ_Main:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            Fill: =ColorValue("#F8FAFC")
+            Height: =Parent.Height
+            LayoutAlignItems: =LayoutAlignItems.Stretch
+            LayoutDirection: =LayoutDirection.Vertical
+            PaddingBottom: =8
+            PaddingLeft: =8
+            PaddingRight: =8
+            PaddingTop: =8
+            Width: =Parent.Width
+          Children:
+            - con_MQ_Navbar:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  AlignInContainer: =AlignInContainer.SetByContainer
+                  BorderColor: =ColorValue("#E2E8F0")
+                  BorderThickness: =1
+                  Fill: =ColorValue("#FFFFFF")
+                  FillPortions: =0
+                  Height: =68
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                  LayoutMaxHeight: =68
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  PaddingBottom: =8
+                  PaddingLeft: =32
+                  PaddingRight: =32
+                  PaddingTop: =8
+                  Width: =Parent.Width
+                Children:
+                  - lbl_MQ_NavLogo:
+                      Control: Label@2.5.1
+                      Properties:
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =ColorValue("#0F172A")
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Bold
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =16
+                        Text: ="TALENTFLOW"
+                        Width: =160
+                        Wrap: =false
+                  - lbl_MQ_NavDivider:
+                      Control: Label@2.5.1
+                      Properties:
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =ColorValue("#CBD5E1")
+                        Font: =Font.'Open Sans'
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =16
+                        Text: ="|"
+                        Width: =20
+                  - lbl_MQ_NavSubtitle:
+                      Control: Label@2.5.1
+                      Properties:
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =ColorValue("#64748B")
+                        FillPortions: =1
+                        Font: =Font.'Open Sans'
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Text: ="Manager Review Portal"
+                        Wrap: =false
+                  - btn_MQ_NavToIntake:
+                      Control: Classic/Button@2.2.0
+                      Properties:
+                        BorderColor: =ColorFade(Self.Fill, -15%)
+                        Color: =ColorValue("#0F172A")
+                        DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                        Fill: =ColorValue("#F1F5F9")
+                        Font: =Font.'Open Sans'
+                        FontWeight: =FontWeight.Normal
+                        Height: =42
+                        HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+                        HoverColor: =RGBA(255, 255, 255, 1)
+                        HoverFill: =ColorValue("#E2E8F0")
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        OnSelect: =Navigate(scr_Intake, ScreenTransition.Fade)
+                        PaddingBottom: =0
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =0
+                        PressedBorderColor: =Self.Fill
+                        PressedColor: =Self.Fill
+                        PressedFill: =Self.Color
+                        RadiusBottomLeft: =6
+                        RadiusBottomRight: =6
+                        RadiusTopLeft: =6
+                        RadiusTopRight: =6
+                        Size: =13
+                        Text: ="← New Placement"
+                        Width: =210
+            - con_MQ_ScrollArea:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  AlignInContainer: =AlignInContainer.SetByContainer
+                  Height: =Parent.Height - 68
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  LayoutOverflowY: =LayoutOverflow.Scroll
+                  PaddingBottom: =8
+                  PaddingLeft: =8
+                  PaddingRight: =8
+                  PaddingTop: =8
+                  Width: =Parent.Width
+                Children:
+                  - con_MQ_Content:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        LayoutAlignItems: =LayoutAlignItems.Stretch
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =20
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        PaddingBottom: =40
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =32
+                        Width: =Min(Parent.Width - 48, 860)
+                      Children:
+                        - con_MQ_HeaderRow:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              AlignInContainer: =AlignInContainer.SetByContainer
+                              FillPortions: =0
+                              Height: =48
+                              LayoutAlignItems: =LayoutAlignItems.Center
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutGap: =16
+                              LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =8
+                              PaddingLeft: =8
+                              PaddingRight: =8
+                              PaddingTop: =8
+                              Width: =Parent.Width
+                            Children:
+                              - lbl_MQ_PageTitle:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    BorderColor: =RGBA(0, 18, 107, 1)
+                                    Color: =ColorValue("#0F172A")
+                                    Font: =Font.'Open Sans'
+                                    FontWeight: =FontWeight.Bold
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    Size: =22
+                                    Text: ="Pending Approvals"
+                                    Width: =300
+                                    Wrap: =false
+                              - lbl_MQ_CountBadge:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    BorderColor: =RGBA(0, 18, 107, 1)
+                                    Color: =ColorValue("#4F46E5")
+                                    Fill: =ColorValue("#EEF2FF")
+                                    Font: =Font.'Open Sans'
+                                    FontWeight: =FontWeight.Semibold
+                                    Height: =28
+                                    LayoutMinHeight: =16
+                                    LayoutMinWidth: =16
+                                    PaddingBottom: =4
+                                    PaddingLeft: =10
+                                    PaddingRight: =10
+                                    PaddingTop: =4
+                                    Size: =12
+                                    Text: =Text(CountRows(gal_ManagerQueue.AllItems)) & " Pending"
+                                    Width: =110
+                        - lbl_MQ_EmptyState:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =ColorValue("#E2E8F0")
+                              BorderStyle: =BorderStyle.Dashed
+                              BorderThickness: =1
+                              Color: =ColorValue("#64748B")
+                              Fill: =ColorValue("#FFFFFF")
+                              Font: =Font.'Open Sans'
+                              Height: =100
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              PaddingBottom: =40
+                              PaddingTop: =40
+                              Size: =14
+                              Text: ="All caught up! There are no candidate verifications pending your approval."
+                              Visible: =CountRows(gal_ManagerQueue.AllItems) = 0
+                        - gal_ManagerQueue:
+                            Control: Gallery@2.15.0
+                            Variant: BrowseLayout_Flexible_SocialFeed_ver5.0
+                            Properties:
+                              AlignInContainer: =AlignInContainer.SetByContainer
+                              BorderColor: =RGBA(0, 18, 107, 1)
+                              Items: |-
+                                =Filter(
+                                    'Onboarding Tracker',
+                                    ManagerEmail.Email = User().Email && 
+                                    OnboardingStatus.Value = "Pending Approval"
+                                )
+                              LayoutMinHeight: =16
+                              LayoutMinWidth: =16
+                              ShowScrollbar: =false
+                              TemplatePadding: =0
+                              TemplateSize: =160
+                              Visible: =CountRows(Self.AllItems) > 0
+                            Children:
+                              - con_MQ_Card:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    BorderColor: =ColorValue("#E2E8F0")
+                                    BorderThickness: =1
+                                    Fill: =ColorValue("#FFFFFF")
+                                    Height: =550
+                                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                                    LayoutDirection: =LayoutDirection.Vertical
+                                    LayoutGap: =14
+                                    PaddingBottom: =20
+                                    PaddingLeft: =24
+                                    PaddingRight: =24
+                                    PaddingTop: =20
+                                    RadiusBottomLeft: =12
+                                    RadiusBottomRight: =12
+                                    RadiusTopLeft: =12
+                                    RadiusTopRight: =12
+                                    Width: =Parent.TemplateWidth
+                                  Children:
+                                    - con_MQ_CardTop:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          AlignInContainer: =AlignInContainer.SetByContainer
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                                          LayoutMaxHeight: =28
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PaddingBottom: =8
+                                          PaddingLeft: =8
+                                          PaddingRight: =8
+                                          PaddingTop: =8
+                                        Children:
+                                          - lbl_MQ_HireName:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                BorderColor: =RGBA(0, 18, 107, 1)
+                                                Color: =ColorValue("#0F172A")
+                                                FillPortions: =1
+                                                Font: =Font.'Open Sans'
+                                                FontWeight: =FontWeight.Semibold
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Size: =17
+                                                Text: =ThisItem.Title
+                                                Wrap: =false
+                                          - lbl_MQ_StatusPill:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                Align: =Align.Center
+                                                BorderColor: =RGBA(0, 18, 107, 1)
+                                                Color: =ColorValue("#B45309")
+                                                Fill: =ColorValue("#FEF3C7")
+                                                FillPortions: =1
+                                                Font: =Font.'Open Sans'
+                                                FontWeight: =FontWeight.Bold
+                                                Height: =24
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                PaddingBottom: =3
+                                                PaddingLeft: =8
+                                                PaddingRight: =8
+                                                PaddingTop: =3
+                                                Size: =11
+                                                Text: ="PENDING REVIEW"
+                                    - con_MQ_CardMeta:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          AlignInContainer: =AlignInContainer.SetByContainer
+                                          Height: =24
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutGap: =20
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          LayoutOverflowY: =LayoutOverflow.Scroll
+                                          PaddingBottom: =8
+                                          PaddingLeft: =8
+                                          PaddingRight: =8
+                                          PaddingTop: =8
+                                        Children:
+                                          - lbl_MQ_HireDept:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                BorderColor: =RGBA(0, 18, 107, 1)
+                                                Color: =ColorValue("#475569")
+                                                Font: =Font.'Open Sans'
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Text: =ThisItem.Department.Value
+                                          - lbl_MQ_HireHardware:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                BorderColor: =RGBA(0, 18, 107, 1)
+                                                Color: =ColorValue("#475569")
+                                                Font: =Font.'Open Sans'
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Text: |-
+                                                  ="💻 " & ThisItem.EquipmentPreference.Value
+                                          - lbl_MQ_HireDate:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                BorderColor: =RGBA(0, 18, 107, 1)
+                                                Color: =ColorValue("#475569")
+                                                Font: =Font.'Open Sans'
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                Text: |-
+                                                  ="📅 Start: " & Text(ThisItem.StartDate, "mmm dd, yyyy")
+                                    - con_MQ_CardActions:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          AlignInContainer: =AlignInContainer.SetByContainer
+                                          Height: =44
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Horizontal
+                                          LayoutGap: =12
+                                          LayoutJustifyContent: =LayoutJustifyContent.End
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          PaddingBottom: =8
+                                          PaddingLeft: =8
+                                          PaddingRight: =8
+                                          PaddingTop: =8
+                                        Children:
+                                          - btn_MQ_Reject:
+                                              Control: Classic/Button@2.2.0
+                                              Properties:
+                                                BorderColor: =ColorValue("#FCA5A5")
+                                                BorderThickness: =1
+                                                Color: =ColorValue("#DC2626")
+                                                DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                                                Fill: =ColorValue("#FFFFFF")
+                                                Font: =Font.'Open Sans'
+                                                FontWeight: =FontWeight.Normal
+                                                Height: =55
+                                                HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+                                                HoverColor: =RGBA(255, 255, 255, 1)
+                                                HoverFill: =ColorValue("#FEF2F2")
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                OnSelect: |-
+                                                  =Patch(
+                                                      'Onboarding Tracker',
+                                                      ThisItem,
+                                                      {
+                                                          OnboardingStatus: {
+                                                              '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                                              Value: "Rejected"
+                                                          }
+                                                      }
+                                                  );
+                                                  Notify("Candidate onboarding request rejected.", NotificationType.Warning);
+                                                PressedBorderColor: =Self.Fill
+                                                PressedColor: =Self.Fill
+                                                PressedFill: =Self.Color
+                                                RadiusBottomLeft: =6
+                                                RadiusBottomRight: =6
+                                                RadiusTopLeft: =6
+                                                RadiusTopRight: =6
+                                                Text: ="Reject Placement"
+                                                Width: =140
+                                          - btn_MQ_Approve:
+                                              Control: Classic/Button@2.2.0
+                                              Properties:
+                                                BorderColor: =ColorFade(Self.Fill, -15%)
+                                                BorderThickness: =0
+                                                Color: =ColorValue("#FFFFFF")
+                                                DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                                                Fill: =ColorValue("#4F46E5")
+                                                Font: =Font.'Open Sans'
+                                                Height: =55
+                                                HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+                                                HoverColor: =RGBA(255, 255, 255, 1)
+                                                HoverFill: =ColorValue("#4338CA")
+                                                LayoutMinHeight: =16
+                                                LayoutMinWidth: =16
+                                                OnSelect: |-
+                                                  =Patch(
+                                                      'Onboarding Tracker',
+                                                      ThisItem,
+                                                      {
+                                                          OnboardingStatus: {
+                                                              '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                                              Value: "Approved"
+                                                          }
+                                                      }
+                                                  );
+                                                  Notify("Approved! Welcome Packet automation triggered via Power Automate.", NotificationType.Success);
+                                                PressedBorderColor: =Self.Fill
+                                                PressedColor: =Self.Fill
+                                                PressedFill: =Self.Color
+                                                RadiusBottomLeft: =6
+                                                RadiusBottomRight: =6
+                                                RadiusTopLeft: =6
+                                                RadiusTopRight: =6
+                                                Text: ="Approve & Dispatch"

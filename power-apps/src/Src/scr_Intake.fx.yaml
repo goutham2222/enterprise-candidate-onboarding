@@ -1,0 +1,506 @@
+scr_Intake As screen:
+    CopilotContext: |-
+        ={ ScreenName: Self.Name }
+    CopilotPromptSuggestions: =[]
+    Fill: |-
+        =ColorValue("#F8FAFC")
+
+    con_Intake_Main As groupContainer.verticalAutoLayoutContainer:
+        Fill: =gblTheme.CanvasBg
+        Height: =Parent.Height
+        LayoutAlignItems: =LayoutAlignItems.Stretch
+        LayoutDirection: =LayoutDirection.Vertical
+        LayoutGridColumnMinWidth: =0
+        LayoutGridColumns: =6
+        LayoutGridRowMinHeight: =0
+        LayoutGridRows: =6
+        LayoutMode: =LayoutMode.Auto
+        PaddingBottom: =8
+        PaddingLeft: =8
+        PaddingRight: =8
+        PaddingTop: =8
+        Width: =Parent.Width
+        ZIndex: =1
+
+        con_Intake_Navbar As groupContainer.horizontalAutoLayoutContainer:
+            AlignInContainer: =AlignInContainer.SetByContainer
+            BorderColor: =gblTheme.Border
+            BorderThickness: =1
+            Fill: =gblTheme.SurfaceBg
+            FillPortions: =0
+            Height: =68
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutGridColumnMinWidth: =0
+            LayoutGridColumns: =6
+            LayoutGridRowMinHeight: =0
+            LayoutGridRows: =6
+            LayoutMaxHeight: =68
+            LayoutMaxWidth: =0
+            LayoutMinHeight: =16
+            LayoutMinWidth: =16
+            LayoutMode: =LayoutMode.Auto
+            PaddingBottom: =8
+            PaddingLeft: =32
+            PaddingRight: =32
+            PaddingTop: =8
+            Width: =Parent.Width
+            ZIndex: =1
+
+            lbl_NavLogo As label:
+                Color: |-
+                    =ColorValue("#0F172A")
+                FontWeight: =FontWeight.Bold
+                LayoutMaxHeight: =0
+                LayoutMaxWidth: =0
+                LayoutMinHeight: =16
+                LayoutMinWidth: =16
+                Size: =16
+                Text: ="TALENTFLOW"
+                Width: =160
+                Wrap: =false
+                ZIndex: =1
+
+            lbl_NavDivider As label:
+                Color: |-
+                    =ColorValue("#CBD5E1")
+                LayoutMaxHeight: =0
+                LayoutMaxWidth: =0
+                LayoutMinHeight: =16
+                LayoutMinWidth: =16
+                Size: =16
+                Text: ="|"
+                Width: =20
+                ZIndex: =2
+
+            lbl_NavSubtitle As label:
+                Color: |-
+                    =ColorValue("#64748B")
+                FillPortions: =1
+                LayoutMaxHeight: =0
+                LayoutMaxWidth: =0
+                LayoutMinHeight: =16
+                LayoutMinWidth: =16
+                Text: ="Candidate Intake Portal"
+                Wrap: =false
+                ZIndex: =3
+
+            btn_NavManagerQueue As label:
+                Color: |-
+                    =ColorValue("#4F46E5")
+                Fill: |-
+                    =ColorValue("#EEF2FF")
+                HoverFill: |-
+                    =ColorValue("#E0E7FF")
+                LayoutMaxHeight: =0
+                LayoutMaxWidth: =0
+                LayoutMinHeight: =16
+                LayoutMinWidth: =16
+                OnSelect: =Navigate(scr_ManagerQueue, ScreenTransition.Fade)
+                PaddingLeft: =12
+                PaddingRight: =12
+                Text: ="Manager View →"
+                Visible: |-
+                    =// Only visible if the logged-in user is an HR admin or is assigned as a manager for at least one candidate
+                    Lower(User().Email) = Lower("peopleops@organization.com") ||
+                    !IsEmpty(Filter('Onboarding Tracker', ManagerEmail.Email = User().Email))
+                Width: =170
+                ZIndex: =4
+
+        con_Intake_ScrollArea As groupContainer.verticalAutoLayoutContainer:
+            AlignInContainer: =AlignInContainer.SetByContainer
+            Height: =Parent.Height - 68
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutDirection: =LayoutDirection.Vertical
+            LayoutGridColumnMinWidth: =0
+            LayoutGridColumns: =6
+            LayoutGridRowMinHeight: =0
+            LayoutGridRows: =6
+            LayoutMaxHeight: =0
+            LayoutMaxWidth: =0
+            LayoutMinHeight: =16
+            LayoutMinWidth: =16
+            LayoutMode: =LayoutMode.Auto
+            LayoutOverflowY: =LayoutOverflow.Scroll
+            PaddingBottom: =8
+            PaddingLeft: =8
+            PaddingRight: =8
+            PaddingTop: =8
+            Width: =Parent.Width
+            ZIndex: =2
+
+            con_Intake_Card As groupContainer.verticalAutoLayoutContainer:
+                BorderColor: |-
+                    =ColorValue("#E2E8F0")
+                BorderThickness: =1
+                Fill: |-
+                    =ColorValue("#FFFFFF")
+                LayoutAlignItems: =LayoutAlignItems.Stretch
+                LayoutDirection: =LayoutDirection.Vertical
+                LayoutGap: =14
+                LayoutGridColumnMinWidth: =0
+                LayoutGridColumns: =6
+                LayoutGridRowMinHeight: =0
+                LayoutGridRows: =6
+                LayoutMaxHeight: =0
+                LayoutMaxWidth: =0
+                LayoutMinHeight: =16
+                LayoutMinWidth: =16
+                LayoutMode: =LayoutMode.Auto
+                LayoutOverflowY: =LayoutOverflow.Scroll
+                PaddingBottom: =36
+                PaddingLeft: =36
+                PaddingRight: =36
+                PaddingTop: =36
+                RadiusBottomLeft: =12
+                RadiusBottomRight: =12
+                RadiusTopLeft: =12
+                RadiusTopRight: =12
+                Width: =Min(Parent.Width - 48, 640)
+                ZIndex: =1
+
+                lbl_CardTitle As label:
+                    Color: |-
+                        =ColorValue("#0F172A")
+                    Font: =Font.'Segoe UI'
+                    FontWeight: =FontWeight.Semibold
+                    Height: =44
+                    LayoutMaxHeight: =0
+                    LayoutMaxWidth: =0
+                    LayoutMinHeight: =16
+                    LayoutMinWidth: =16
+                    Size: =22
+                    Text: ="Register New Placement"
+                    Wrap: =false
+                    ZIndex: =1
+
+                lbl_CardSubtitle As label:
+                    Color: |-
+                        =ColorValue("#64748B")
+                    Height: =36
+                    LayoutMaxHeight: =0
+                    LayoutMaxWidth: =0
+                    LayoutMinHeight: =16
+                    LayoutMinWidth: =16
+                    Text: ="Enter candidate details and verify reporting manager for institutional onboarding."
+                    ZIndex: =2
+
+                lbl_Name As label:
+                    Color: |-
+                        =ColorValue("#334155")
+                    LayoutMaxHeight: =0
+                    LayoutMaxWidth: =0
+                    LayoutMinHeight: =16
+                    LayoutMinWidth: =16
+                    Text: ="Candidate Full Name"
+                    Wrap: =false
+                    ZIndex: =3
+
+                txt_CandidateName As text:
+                    AlignInContainer: =AlignInContainer.Stretch
+                    BorderColor: |-
+                        =ColorValue("#CBD5E1")
+                    BorderThickness: =1
+                    Color: |-
+                        =ColorValue("#0F172A")
+                    Default: =
+                    Fill: |-
+                        =ColorValue("#FFFFFF")
+                    FocusedBorderThickness: =2
+                    Height: =44
+                    HintText: ="e.g., Alex Johnson"
+                    HoverBorderColor: |-
+                        =ColorValue("#4F46E5")
+                    LayoutMaxHeight: =0
+                    LayoutMaxWidth: =0
+                    LayoutMinHeight: =16
+                    LayoutMinWidth: =16
+                    RadiusBottomLeft: =8
+                    RadiusBottomRight: =8
+                    RadiusTopLeft: =8
+                    RadiusTopRight: =8
+                    Size: =14
+                    ZIndex: =4
+
+                lbl_Email As label:
+                    Color: |-
+                        =ColorValue("#334155")
+                    Height: =24
+                    LayoutMaxHeight: =0
+                    LayoutMaxWidth: =0
+                    LayoutMinHeight: =16
+                    LayoutMinWidth: =16
+                    Text: ="Personal Email Address"
+                    Wrap: =false
+                    ZIndex: =5
+
+                txt_CandidateEmail As text:
+                    BorderColor: |-
+                        =ColorValue("#CBD5E1")
+                    BorderThickness: =1
+                    Color: |-
+                        =ColorValue("#0F172A")
+                    Default: =
+                    Fill: |-
+                        =ColorValue("#FFFFFF")
+                    FocusedBorderThickness: =2
+                    Height: =44
+                    HintText: ="e.g., alex.johnson@gmail.com"
+                    HoverBorderColor: |-
+                        =ColorValue("#4F46E5")
+                    LayoutMaxHeight: =0
+                    LayoutMaxWidth: =0
+                    LayoutMinHeight: =16
+                    LayoutMinWidth: =16
+                    RadiusBottomLeft: =8
+                    RadiusBottomRight: =8
+                    RadiusTopLeft: =8
+                    RadiusTopRight: =8
+                    Size: =14
+                    ZIndex: =6
+
+                con_Row_DeptHardware As groupContainer.horizontalAutoLayoutContainer:
+                    AlignInContainer: =AlignInContainer.SetByContainer
+                    FillPortions: =0
+                    Height: =110
+                    LayoutAlignItems: =LayoutAlignItems.Stretch
+                    LayoutGap: =16
+                    LayoutGridColumnMinWidth: =0
+                    LayoutGridColumns: =6
+                    LayoutGridRowMinHeight: =0
+                    LayoutGridRows: =6
+                    LayoutMaxHeight: =0
+                    LayoutMaxWidth: =0
+                    LayoutMinHeight: =16
+                    LayoutMinWidth: =16
+                    LayoutMode: =LayoutMode.Auto
+                    PaddingBottom: =8
+                    PaddingLeft: =8
+                    PaddingRight: =8
+                    PaddingTop: =8
+                    Width: =Parent.Width
+                    ZIndex: =7
+
+                    con_Col_Dept As groupContainer.verticalAutoLayoutContainer:
+                        AlignInContainer: =AlignInContainer.SetByContainer
+                        LayoutAlignItems: =LayoutAlignItems.Stretch
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =4
+                        LayoutGridColumnMinWidth: =0
+                        LayoutGridColumns: =6
+                        LayoutGridRowMinHeight: =0
+                        LayoutGridRows: =6
+                        LayoutMaxHeight: =0
+                        LayoutMaxWidth: =0
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        LayoutMode: =LayoutMode.Auto
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =8
+                        ZIndex: =1
+
+                        lbl_Dept As label:
+                            Color: |-
+                                =ColorValue("#334155")
+                            Height: =24
+                            LayoutMaxHeight: =0
+                            LayoutMaxWidth: =0
+                            LayoutMinHeight: =16
+                            LayoutMinWidth: =16
+                            Text: ="Assigned Department"
+                            Wrap: =false
+                            ZIndex: =1
+
+                        drp_Department As dropdown:
+                            BorderColor: |-
+                                =ColorValue("#CBD5E1")
+                            BorderThickness: =1
+                            Color: |-
+                                =ColorValue("#0F172A")
+                            Fill: |-
+                                =ColorValue("#FFFFFF")
+                            Height: =44
+                            Items: =["Engineering", "Product", "Design", "Operations", "Human Resources", "Finance", "Information Technology", "Operations"]
+                            LayoutMaxHeight: =0
+                            LayoutMaxWidth: =0
+                            LayoutMinHeight: =16
+                            LayoutMinWidth: =16
+                            Size: =14
+                            ZIndex: =2
+
+                    con_Col_Hardware As groupContainer.verticalAutoLayoutContainer:
+                        AlignInContainer: =AlignInContainer.SetByContainer
+                        LayoutAlignItems: =LayoutAlignItems.Stretch
+                        LayoutDirection: =LayoutDirection.Vertical
+                        LayoutGap: =4
+                        LayoutGridColumnMinWidth: =0
+                        LayoutGridColumns: =6
+                        LayoutGridRowMinHeight: =0
+                        LayoutGridRows: =6
+                        LayoutMaxHeight: =0
+                        LayoutMaxWidth: =0
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        LayoutMode: =LayoutMode.Auto
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        PaddingTop: =8
+                        ZIndex: =2
+
+                        lbl_Hardware As label:
+                            Color: |-
+                                =ColorValue("#334155")
+                            Height: =24
+                            LayoutMaxHeight: =0
+                            LayoutMaxWidth: =0
+                            LayoutMinHeight: =16
+                            LayoutMinWidth: =16
+                            Text: ="Hardware Provisioning"
+                            Wrap: =false
+                            ZIndex: =1
+
+                        drp_Hardware As dropdown:
+                            BorderColor: |-
+                                =ColorValue("#CBD5E1")
+                            BorderThickness: =1
+                            Color: |-
+                                =ColorValue("#0F172A")
+                            Fill: |-
+                                =ColorValue("#FFFFFF")
+                            Height: =44
+                            Items: =["MacBook Pro 16", "MacBook Pro 14", "Dell XPS 15", "Lenovo ThinkPad P1", "High-Performance Linux Workstation"]
+                            LayoutMaxHeight: =0
+                            LayoutMaxWidth: =0
+                            LayoutMinHeight: =16
+                            LayoutMinWidth: =16
+                            ZIndex: =2
+
+                lbl_StartDate As label:
+                    Color: |-
+                        =ColorValue("#334155")
+                    Height: =24
+                    LayoutMaxHeight: =0
+                    LayoutMaxWidth: =0
+                    LayoutMinHeight: =16
+                    LayoutMinWidth: =16
+                    Text: ="Official Start Date"
+                    Wrap: =false
+                    ZIndex: =8
+
+                dte_StartDate As datepicker:
+                    BorderColor: |-
+                        =ColorValue("#CBD5E1")
+                    BorderThickness: =1
+                    Color: |-
+                        =ColorValue("#0F172A")
+                    DefaultDate: =Today() + 14
+                    Fill: |-
+                        =ColorValue("#FFFFFF")
+                    Height: =44
+                    LayoutMaxHeight: =0
+                    LayoutMaxWidth: =0
+                    LayoutMinHeight: =16
+                    LayoutMinWidth: =16
+                    ZIndex: =9
+
+                lbl_ManagerSearch As label:
+                    Color: |-
+                        =ColorValue("#334155")
+                    Height: =24
+                    LayoutMaxHeight: =0
+                    LayoutMaxWidth: =0
+                    LayoutMinHeight: =16
+                    LayoutMinWidth: =16
+                    Text: ="Reporting Manager (Entra ID Directory Search)"
+                    Wrap: =false
+                    ZIndex: =10
+
+                cmb_ManagerSearch As combobox:
+                    BorderColor: |-
+                        =ColorValue("#CBD5E1")
+                    BorderThickness: =1
+                    Color: |-
+                        =ColorValue("#0F172A")
+                    DisplayFields: =["DisplayName"]
+                    Fill: |-
+                        =ColorValue("#FFFFFF")
+                    Height: =44
+                    InputTextPlaceholder: ="Type manager name or institutional email..."
+                    Items: |-
+                        =Office365Users.SearchUser({searchTerm: cmb_ManagerSearch.SearchText, top: 10})
+                    LayoutMaxHeight: =0
+                    LayoutMaxWidth: =0
+                    LayoutMinHeight: =16
+                    LayoutMinWidth: =16
+                    SearchFields: =["DisplayName","Mail","UserPrincipalName"]
+                    SearchItems: |-
+                        =Search(Office365Users.SearchUser({searchTerm:cmb_ManagerSearch.SearchText,top:10}),cmb_ManagerSearch.SearchText,DisplayName,Mail,UserPrincipalName)
+                    SelectMultiple: =false
+                    Size: =14
+                    ZIndex: =11
+
+                btn_SubmitOnboarding As button:
+                    BorderThickness: =0
+                    Color: |-
+                        =ColorValue("#FFFFFF")
+                    Fill: |-
+                        =ColorValue("#4F46E5")
+                    Height: =48
+                    HoverFill: |-
+                        =ColorValue("#4338CA")
+                    LayoutMaxHeight: =0
+                    LayoutMaxWidth: =0
+                    LayoutMinHeight: =16
+                    LayoutMinWidth: =16
+                    OnSelect: |-
+                        =If(
+                            IsBlank(txt_CandidateName.Text) || 
+                            IsBlank(txt_CandidateEmail.Text) || 
+                            IsBlank(cmb_ManagerSearch.Selected.Mail),
+                            Notify("Please complete all required fields, including the verified reporting manager.", NotificationType.Error),
+                            
+                            Patch(
+                                'Onboarding Tracker',
+                                Defaults('Onboarding Tracker'),
+                                {
+                                    Title: Trim(txt_CandidateName.Text),
+                                    PersonalEmail: Trim(txt_CandidateEmail.Text),
+                                    Department: {
+                                        '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                        Value: drp_Department.Selected.Value
+                                    },
+                                    StartDate: dte_StartDate.SelectedDate,
+                                    EquipmentPreference: {
+                                        '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                        Value: drp_Hardware.Selected.Value
+                                    },
+                                    ManagerEmail: {
+                            '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedUser",
+                            Claims: "i:0#.f|membership|" & cmb_ManagerSearch.Selected.UserPrincipalName,
+                            Department: "",
+                            DisplayName: cmb_ManagerSearch.Selected.DisplayName,
+                            Email: cmb_ManagerSearch.Selected.Mail,
+                            JobTitle: "",
+                            Picture: ""
+                        },
+                                    OnboardingStatus: {
+                                        '@odata.type': "#Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference",
+                                        Value: "Pending Approval"
+                                    }
+                                }
+                            );
+                            Notify("Onboarding request for " & txt_CandidateName.Text & " successfully dispatched!", NotificationType.Success);
+                            Reset(txt_CandidateName);
+                            Reset(txt_CandidateEmail);
+                            Reset(cmb_ManagerSearch);
+                        )
+                    RadiusBottomLeft: =8
+                    RadiusBottomRight: =8
+                    RadiusTopLeft: =8
+                    RadiusTopRight: =8
+                    Size: =14
+                    Text: ="Submit Onboarding Record"
+                    ZIndex: =12
+

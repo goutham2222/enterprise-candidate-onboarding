@@ -1,0 +1,75 @@
+{
+  "name": "01-manual-trigger-definition",
+  "displayName": "Batch Candidate Dispatcher",
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "contentVersion": "1.0.0.0",
+    "triggers": {
+      "manual": {
+        "type": "Request",
+        "kind": "Button",
+        "inputs": { "schema": { "type": "object", "properties": {}, "required": [] } }
+      }
+    },
+    "actions": {
+      "Get_items": {
+        "runAfter": {},
+        "type": "OpenApiConnection",
+        "inputs": {
+          "parameters": {
+            "dataset": "https://{{ORGANIZATION}}.sharepoint.com/sites/OnboardingTracker",
+            "table": "{{INVITE_DISPATCHER_LIST_GUID}}",
+            "$filter": "InviteStatus eq 'Pending'"
+          },
+          "host": {
+            "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+            "connectionName": "shared_sharepointonline",
+            "operationId": "GetItems"
+          }
+        }
+      },
+      "Apply_to_each": {
+        "foreach": "@outputs('Get_items')?['body/value']",
+        "actions": {
+          "Send_an_email_(V2)": {
+            "type": "OpenApiConnection",
+            "inputs": {
+              "parameters": {
+                "emailMessage/To": "@items('Apply_to_each')?['CandidateEmail']",
+                "emailMessage/Subject": "Action Required: Welcome to the Team — Complete Your Onboarding Profile",
+                "emailMessage/Body": "<p>Hello @{items('Apply_to_each')?['Title']},</p><p>Please access your onboarding intake portal: <a href=\"https://apps.powerapps.com/play/e/default-{{TENANT_ID}}/a/{{POWER_APPS_APP_ID}}\">Onboarding Portal</a></p>",
+                "emailMessage/Importance": "Normal"
+              },
+              "host": {
+                "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                "connectionName": "shared_office365",
+                "operationId": "SendEmailV2"
+              }
+            }
+          },
+          "Update_item": {
+            "runAfter": { "Send_an_email_(V2)": ["Succeeded"] },
+            "type": "OpenApiConnection",
+            "inputs": {
+              "parameters": {
+                "dataset": "https://{{ORGANIZATION}}.sharepoint.com/sites/OnboardingTracker",
+                "table": "{{INVITE_DISPATCHER_LIST_GUID}}",
+                "id": "@items('Apply_to_each')?['ID']",
+                "item/Title": "@items('Apply_to_each')?['Title']",
+                "item/InviteStatus/Value": "Sent"
+              },
+              "host": {
+                "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                "connectionName": "shared_sharepointonline",
+                "operationId": "PatchItem"
+              }
+            }
+          }
+        },
+        "runAfter": { "Get_items": ["Succeeded"] },
+        "type": "Foreach",
+        "runtimeConfiguration": { "concurrency": { "repetitions": 30 } }
+      }
+    }
+  }
+}
