@@ -54,11 +54,6 @@ The system addresses state synchronization across asynchronous human tasks by co
 
 ---
 
-#### Section 2: Visual Artifacts & Screenshots (Updated for 8 Images & Dual Lists)
-
-```markdown
----
-
 ## System Visuals & Architecture Artifacts
 
 > **Security & Privacy Note:** All directory identifiers, tenant IDs, and corporate email addresses have been obfuscated in the following architectural artifacts.
